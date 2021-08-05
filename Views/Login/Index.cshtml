@@ -1,0 +1,566 @@
+﻿
+@{
+
+    Layout = null;
+
+}
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Sistema-Login</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="~/css/jquery-ui.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/keyboard.css" />
+    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    @*<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">*@
+
+    <!-- Custom styles for this template-->
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="wrapper" class="bg-register-image"  onload="focus()">
+
+    <div class="container wrapper">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row justify-content-center">
+                            @*<div class="col-lg-6 d-none d-lg-block bg-register-image"></div>*@
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-white mb-4">SysPos</h1>
+                                    </div>
+                                    <div class="user">
+
+
+                                        <div class="row form-group">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <input type="password" class="form-control_Login text-center"  tabindex="1"  autofocus id="Contrasena" name="Contrasena" required placeholder="Contrasena">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <table class="table_teclado">
+                                            <tr>
+                                                <td>1</td>
+                                                <td>2</td>
+                                                <td>3</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>5</td>
+                                                <td>6</td>
+                                            </tr>
+                                            <tr>
+                                                <td>7</td>
+                                                <td>8</td>
+                                                <td>9</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">0</td>
+                                                <td><img class="btn_delete" src="images/borrar.png" alt="←"></td>
+                                            </tr>
+
+                                        </table>
+
+                                        <div class="row form-group">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-Login" onclick="Autentificar()" style="width:100%; height:70px" value="Entrar" @*data-toggle="modal" data-target="#modal-default"*@>
+                                            </div>
+                                        </div>
+
+
+
+                                        @*<div class="form-group">
+                <input type="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <div class="custom-control custom-checkbox small">
+                    <input type="checkbox" class="custom-control-input" id="customCheck">
+                    <label class="custom-control-label" for="customCheck">
+                        Remember
+                        Me
+                    </label>
+                </div>
+            </div>
+            <a href="index.html" class="btn btn-primary btn-user btn-block">
+                Login
+            </a>
+            <hr>
+            <a href="index.html" class="btn btn-google btn-user btn-block">
+                <i class="fab fa-google fa-fw"></i> Login with Google
+            </a>
+            <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
+            </a>*@
+                                    </div>
+                                    @*<hr>
+                                    <div class="text-center">
+                                        <a class="small" href="forgot-password.html">Si olvido la contrasena</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="register.html">Comunicarse con el administrdor del sistema</a>
+                                    </div>*@
+                                    <hr>
+                                    <div class="date text-black-50 h3 font-weight-bold text-center">
+                                        <span id="weekDay" class="weekDay"></span>,
+                                        <span id="day" class="day"></span> de   
+                                        <span id="month" class="month"></span> del
+                                        <span id="year" class="year"></span>
+                                    </div>
+                                    <div class="clock text-black-50 h3 font-weight-bold text-center">
+                                        <span id="hours" class="hours"></span> :
+                                        <span id="minutes" class="minutes"></span> :
+                                        <span id="seconds" class="seconds"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/js/sb-admin-2.min.js"></script>
+
+    <script src="~/js/jquery-ui-custom.min.js"></script>
+    <script src="~/Scripts/jquery.keyboard.js"></script>
+
+    <script>
+
+        function focus() {
+            document.getElementById("Contrasena").focus();
+        }
+      
+
+        $(document).ready(function () {
+
+            $('.table_teclado tr td').click(function () {
+                var number = $(this).text();
+
+                if (number == '') {
+                    $('#Contrasena').val($('#Contrasena').val().substr(0, $('#Contrasena').val().length - 1)).focus();
+                }
+                else {
+                    $('#Contrasena').val($('#Contrasena').val() + number).focus();
+                }
+
+            });
+        });
+        //CambiarContrasena--------------------------------------------------------------------------------------
+        function CambiarContrasena() {
+
+            var Nueva = document.getElementById("txtpasswordNueva").value
+            var Confirmar = document.getElementById("txtContrasenaConfirmar").value
+            var Nombre = document.getElementById("error1").innerHTML  
+            if (Nueva) {
+
+                if (Confirmar) {
+
+                    if (Nueva == Confirmar)
+                    {
+                        if (Nueva.length == 4 && Confirmar.length == 4)
+                        {                           
+                            var Usuario =
+                            {
+                                contrasena: Confirmar,
+                                nombre: Nombre
+                            }
+                                 $.post("../Login/CambiarContrasena", { Usuario }, function (Mensaje)
+                                 {    
+                                     if (Mensaje != "NO") {
+                                   //        $("#error").html(Mensaje);
+                                   //$('#exampleModalLong').modal('show');
+                                   window.location = "../Home/Index"
+                                     }
+                                     else {
+                                          alert("Esa contrasena existe en el sistema por otro usuario");
+                                     }
+                                 
+                            
+                                 }
+                                 )
+                        }
+                        else {
+                             alert("La contrasena debe contener 4 digitos");
+                        }
+
+                     
+
+
+                    }
+                    else {
+                        alert("Contrasena no coinciden");
+                    }
+
+                }
+                else {
+                        alert("Digite confirmar contrasena");
+                        //$('#exampleModalLong').modal('show');
+                }
+            }
+            else {
+                        alert("Digite nueva contrasena");
+                        //$('#exampleModalLong').modal('show');
+            }
+
+        }
+        //login--------------------------------------------------------------------------------------
+
+        var input = document.getElementById("Contrasena");
+        input.addEventListener("keyup", function(event) {
+          if (event.keyCode === 13) {
+              //event.preventDefault();
+               Autentificar() 
+           //document.getElementById("myBtn").click();
+             }
+        });
+
+
+        function Autentificar() {
+
+            var Pass = $("#Contrasena").val()
+            var Usuario =
+            {
+                contrasena: Pass
+            }
+
+            $.post("../Login/Index", { Usuario }, function (Mensaje) {
+
+                if (Mensaje.Mensaje != "Autentificado" && Mensaje.Mensaje != "AutentificadoVendedor")
+                {
+
+                    if (Mensaje.Mensaje != "ResetContrasena") {
+                        $("#error").html(Mensaje.Mensaje);
+                        $('#exampleModalLong').modal('show');
+                    }
+                    else {
+                        $('#txtpasswordNueva').val("")
+                        $('#txtContrasenaConfirmar').val("")
+                         $("#error1").html(Mensaje.Usuario);
+                        $('#resetContrasena').modal('show');
+                    }
+                }
+                else {
+
+                    if (Mensaje.Mensaje == "AutentificadoVendedor") {
+
+                        window.location = "../Orden/Index"
+                    }
+                    if (Mensaje.Mensaje == "Autentificado"){
+                         window.location = "../Home/Index"
+                    }
+                   
+
+                   
+                }
+
+            })
+
+        }
+
+            var udateTime = function () {
+        let currentDate = new Date(),
+            hours = currentDate.getHours(),
+            minutes = currentDate.getMinutes(),
+            seconds = currentDate.getSeconds(),
+            weekDay = currentDate.getDay(),
+            day = currentDate.getDate(),
+            month = currentDate.getMonth(),
+            year = currentDate.getFullYear();
+
+        const weekDays = [
+            'Domingo',
+            'Lunes',
+            'Martes',
+            'Miércoles',
+            'Jueves',
+            'Viernes',
+            'Sabado'
+        ];
+
+        document.getElementById('weekDay').textContent = weekDays[weekDay];
+        document.getElementById('day').textContent = day;
+
+        const months = [
+            'Enero',
+            'Febrero',
+            'Marzo',
+            'Abril',
+            'Mayo',
+            'Junio',
+            'Julio',
+            'Agosto',
+            'Septiembre',
+            'Octubre',
+            'Noviembre',
+            'Diciembre'
+        ];
+
+        document.getElementById('month').textContent = months[month];
+        document.getElementById('year').textContent = year;
+
+        document.getElementById('hours').textContent = hours;
+
+        if (minutes < 10) {
+            minutes = "0" + minutes
+        }
+
+        if (seconds < 10) {
+            seconds = "0" + seconds
+        }
+
+        document.getElementById('minutes').textContent = minutes;
+        document.getElementById('seconds').textContent = seconds;
+    };
+
+    udateTime();
+
+    setInterval(udateTime, 1000);
+
+
+    </script>
+
+    <style>
+
+        .firstBlur, .secondBlur, .imgBlur {
+            margin: 50px 20px 0;
+            border: solid 1px black;
+            padding: 20px;
+            position: relative;
+        }
+
+            .secondBlur .overlay {
+                background-color: #bf6363;
+                top: 0;
+                left: 0;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                filter: opacity(0.5);
+                filter: blur(20px);
+            }
+
+            .secondBlur .card {
+                display: block;
+                border: solid 1px blue;
+                width: 300px;
+                height: 200px;
+                margin: 0 auto;
+            }
+
+            .secondBlur .someText {
+                margin-top: 30px;
+            }
+
+            .imgBlur img {
+                width: 600px;
+                -webkit-filter: blur(5px);
+                filter: blur(5px);
+            }
+
+            /* === CSS FILTER EFFECTS === */
+            .firstBlur.modalBlur > *:not(.modal) {
+                -webkit-filter: blur(8px);
+            }
+
+            .firstBlur.modalDesaturate > *:not(.modal) {
+                -webkit-filter: saturate(0%);
+            }
+        /* === SOFTEN THE MODAL BACKDROP SO THE EFFECT IS MORE VISIBLE === */
+        .modal-backdrop {
+            opacity: 0.65;
+            filter: alpha(opacity=65);
+        }
+        .btn-Login {
+            color: #fff;
+            background-color: #4e73dfc7;
+            border-color: #4e73df;
+        }
+
+        .table_teclado tr td {
+            background: #0000009c;
+            color: #FFF;
+            padding: .2em .5em;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: sans-serif;
+            border: 1px solid #757575;
+            max-width: 600px;
+            width: 300px;
+            height: 100px;
+            max-height: 600px;
+            position: relative;
+            text-align:center;
+            font-size:medium;
+        }
+        .form-control_Login {
+   
+        display: block;
+        width: 100%;
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #6e707e;
+        background-color: #fff0;
+        background-clip: padding-box;
+        border: 1px solid #d1d3e2;
+        border-radius: .35rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+            .table_teclado tr td:hover {
+                background: #525252;
+            }
+
+        .btn_delete {
+            position: absolute;
+            left: .1em;
+            bottom: .1em;
+            width: 19px;
+        }
+
+        
+    </style>
+
+
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-backdrop="true" data-keyboard="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle"><span class="fas fa-comments fa-2x"> Mensaje</span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span class="fa fa-bars"></span>  <p id="error"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                    @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="resetContrasena" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-backdrop="true" data-keyboard="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle"><span class="fas fa-user fa-2x"> Contrasena</span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="con-teclado-decimal">
+                    <form>
+
+
+                        <div class="modal-body">
+                            <p id="error1"></p>
+                            @*<p id="error"></p>*@
+                        <div class="form-group">
+                            <div>
+
+                                <input type="password" class="form-control form-control-user text-center" maxlength="4" id="txtpasswordNueva" name="Contrasena" required placeholder="Nueva">
+
+                            </div>
+
+
+                            <script>
+                                $('#txtpasswordNueva')
+                                    .keyboard({
+                                        layout: 'custom',
+                                        customLayout: {
+                                            'normal': [
+                                               '1 2 3 4',
+                                                '5 6 7 8',
+                                                '9 0',
+                                                '{bksp} {a} {c}'
+                                            ]
+                                        },
+                                        maxLength: 4,
+                                        restrictInput: false, // Prevent keys not in the displayed keyboard from being typed in
+                                        preventPaste: true,  // prevent ctrl-v and right click
+                                        autoAccept: true
+                                    })
+                                    .addTyping();
+                            </script>
+
+                        </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control form-control-user text-center" maxlength="4" id="txtContrasenaConfirmar" name="Contrasena" required placeholder="Confirmar">
+                            </div>
+
+                            <script>
+                                $('#txtContrasenaConfirmar')
+                                    .keyboard({
+                                        layout: 'custom',
+                                        customLayout: {
+                                            'normal': [
+                                                '1 2 3 4',
+                                                '5 6 7 8',
+                                                '9 0',
+                                                '{bksp} {a} {c}'
+                                            ]
+                                        },
+                                        maxLength: 4,
+                                        restrictInput: false, // Prevent keys not in the displayed keyboard from being typed in
+                                        preventPaste: true,  // prevent ctrl-v and right click
+                                        autoAccept: true
+                                    })
+                                    .addTyping();
+                            </script>
+                        </div>
+                        <div class="modal-footer">
+                            @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>*@
+                            <button type="button" onclick="CambiarContrasena()" class="btn btn-primary">Guardar</button>
+                        </div>
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+</html>

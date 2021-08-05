@@ -1,0 +1,52 @@
+﻿@model barApp.Categoria
+
+@using (Ajax.BeginForm("CrearCategoria", FormMethod.Post, new AjaxOptions { LoadingElementId = "Progress", InsertionMode = InsertionMode.Replace, UpdateTargetId = "Contenedor", OnSuccess = "onSuccessCrearCategoria", OnFailure = "onFailureAjax" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.idTipoCategoria, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(Model => Model.idTipoCategoria, new SelectList((System.Collections.IEnumerable)ViewData["TipoCategoria"], "id", "Tipo"), "Seleccionar", htmlAttributes: new { @class = "form-control",@required="required" })
+                @Html.ValidationMessageFor(model => model.idTipoCategoria, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control",@required="required" } })
+                @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guarda</button>
+            </div>
+        </div>
+    </div>
+}
+
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+
+<script>
+    function onSuccessCrearCategoria() {
+
+        $("#NuevaCategoria").modal("hide")
+    }
+</script>
+
+
+<script>
+    function onFailureAjax() {
+
+        $("#NuevaCategoria").modal("hide")
+    }
+</script>

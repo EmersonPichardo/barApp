@@ -1,0 +1,58 @@
+﻿@model IEnumerable<barApp.ModoPago>
+
+@if (ViewData["ListaModoPago"] != null)
+{
+
+    <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+
+        <tr class="odd">
+            <th>
+                @Html.DisplayNameFor(model => model.numPago)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.otroDetalles)
+            </th>
+            <th>Opciones</th>
+        </tr>
+
+        @foreach (var item in ViewData["ListaModoPago"] as IEnumerable<barApp.ModoPago>)
+        {
+            <tr class="odd">
+                <td>
+                    @Html.DisplayFor(modelItem => item.numPago)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.otroDetalles)
+                </td>
+                <td>
+                    <button data-toggle="modal" onclick="myfunction()" class="btn btn-link" data-target="#ModalEditarModoPago"> <i class="fas fa-edit fa-1x"></i> </button>
+
+                    @Ajax.ActionLink(" ", "EliminarModoPago", "Home", new { id = item.numPago }, new AjaxOptions()
+               {
+                   HttpMethod = "POST",
+                   UpdateTargetId = "Contenedor",
+                   InsertionMode = InsertionMode.Replace,
+                   LoadingElementId = "progress",
+
+                   //OnBegin = "onBeginAjax",
+                   //OnComplete = "onCompleteAjax",
+                   OnSuccess = "onSuccessEliminar",
+                   OnFailure = "onFailureAjax",
+               }, new { @class = "fa fa-eraser fa-1x text-danger" })
+
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+
+
+@{Html.RenderPartial("ModalMessenge", ViewData["Alert"] as barApp.Models.InfoMensaje);}

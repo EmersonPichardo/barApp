@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b9153dfd5701467ab548c9b0686692c4" Name="Diagram1">
+        <EntityTypeShape EntityType="barbdModel.Categoria" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.Cliente" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.Cuadre" Width="1.5" PointX="9.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.DetalleVenta" Width="1.5" PointX="7.5" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.Factura" Width="1.5" PointX="12" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.Impuesto" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.Inventario" Width="1.5" PointX="7.5" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.ModoPago" Width="1.5" PointX="9.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.Producto" Width="1.5" PointX="5.25" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.Roles" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.Suplidor" Width="1.5" PointX="5.25" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.TipoCategoria" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.Usuario" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="barbdModel.Venta" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <AssociationConnector Association="barbdModel.FK_categoria_categoria_idtipoCategoria" ManuallyRouted="false" />
+        <AssociationConnector Association="barbdModel.FK_producto_producto_CategoriaId" ManuallyRouted="false" />
+        <AssociationConnector Association="barbdModel.FK_venta_cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="barbdModel.FK_Factura_Cuadre" ManuallyRouted="false" />
+        <AssociationConnector Association="barbdModel.FK__detalleFa__idPed__239E4DCF" ManuallyRouted="false" />
+        <AssociationConnector Association="barbdModel.FK_detalleFactura_productor" ManuallyRouted="false" />
+        <AssociationConnector Association="barbdModel.FK_factura_modoPago" ManuallyRouted="false" />
+        <AssociationConnector Association="barbdModel.FK_idProducto_PK_idProducto_t_producto" ManuallyRouted="false" />
+        <AssociationConnector Association="barbdModel.FK_idSuplidor_idSuplidor_t_suplidor" ManuallyRouted="false" />
+        <AssociationConnector Association="barbdModel.FK_vendedor_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="barbdModel.FK_Venta_Usuario" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="barbdModel.Gastos" Width="1.5" PointX="12" PointY="4.625" />
+        <AssociationConnector Association="barbdModel.PK_Cuadre_FK_Gastos" />
+        <EntityTypeShape EntityType="barbdModel.InventarioBar" Width="1.5" PointX="7.5" PointY="11.75" />
+        <AssociationConnector Association="barbdModel.FK_InventarioBar_PK_PoductoID" />
+        <EntityTypeShape EntityType="barbdModel.Mesa" Width="1.5" PointX="0.75" PointY="6.125" />
+        <AssociationConnector Association="barbdModel.FK_Cliente_Mesa" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

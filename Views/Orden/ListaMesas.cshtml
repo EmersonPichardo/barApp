@@ -1,0 +1,38 @@
+﻿@model IEnumerable<barApp.Mesa>
+
+@if (Model != null)
+{
+
+
+    <div id="ListaMesas">
+        @{
+            int contador = 1;
+
+           foreach (var item in Model)
+            {
+            
+                if (contador <= 5)
+                {
+                    contador += 1;
+                    <span style="margin:10px 10px 10px 10px;">
+                        <input type="button" data-dismiss="modal" onclick="Diponible('@item.idMesa')" class="btn btn-outline-dark" name="name" value="@item.descripcion @item.idMesa" />
+                    </span>
+                }
+                else
+                { <br />
+                    <br />
+                    <span style="margin:10px 10px 10px 10px;">
+                        <input type="button" data-dismiss="modal" onclick="Diponible('@item.idMesa')" class="btn btn-outline-dark" name="name" value="@item.descripcion @item.idMesa" />
+                    </span>
+                    contador = 1;
+
+                }
+
+
+            }
+
+        }
+    </div>
+
+
+}

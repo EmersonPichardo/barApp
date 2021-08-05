@@ -1,0 +1,58 @@
+﻿@model IEnumerable<barApp.DetalleVenta>
+
+<table id="detalle" class="table table-dark" border="1">
+    <thead style="font-size:18px;">
+
+
+        <tr class="bg-danger">
+            <th>Id</th>
+            <th>Descripcion del Producto</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            @*<th>Descuento</th>*@
+            <th>Total</th>
+            <th>Despachado</th>
+            <th>Borrar</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (Model != null)
+        {
+
+
+           foreach (var item in Model)
+            {
+               
+          <tr class="borrar">
+
+            <td>@item.idProducto</td>
+            <td>@item.Producto.nombre.ToUpper()</td>
+            <td>@item.cantidad</td>
+            <td>@item.precioVenta</td>
+            @*<td>0</td>*@
+            <td>@item.subTotal.ToString()</td>
+
+            @{ 
+
+             if (item.despachada == true)
+                {
+                    <td>Si</td>
+                }
+                else
+                {
+                    <td>No</td>
+                }
+
+            }
+
+        </tr>
+            }
+        }
+
+    </tbody>
+
+</table>
+
+
+

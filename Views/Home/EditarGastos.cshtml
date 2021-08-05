@@ -1,0 +1,53 @@
+﻿@model barApp.Gastos
+
+@using (Ajax.BeginForm("EditarGastos", FormMethod.Post, new AjaxOptions { LoadingElementId = "Progress", InsertionMode = InsertionMode.Replace, UpdateTargetId = "Contenedor", OnSuccess = "onSuccessEditarGastos", OnFailure = "onFailureAjax" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @*<h4>Gastos</h4>
+        <hr />*@
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.IdGastos, new { htmlAttributes = new { @class = "form-control", id = "IdGastosE", @style = "display:none;" } })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.descripcion, new { htmlAttributes = new { @class = "form-control", id = "DescripciongGastosE", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.descripcion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.cantidad, new { htmlAttributes = new { @class = "form-control", id = "CantidadGastosE", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.cantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.idCuadre, "idCuadre", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.idCuadre, new { htmlAttributes = new { @class = "form-control", id = "idCuadreE", @style = "display:none;" } })
+                @*@Html.ValidationMessageFor(model => model.idCuadre, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guarda</button>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+    function onSuccessEditarGastos() {
+
+        $("#ModalEditarGastos").modal("hide")
+    }
+</script>
+

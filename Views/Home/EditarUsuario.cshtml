@@ -1,0 +1,106 @@
+﻿@model barApp.Usuario
+
+@using (Ajax.BeginForm("EditarUsuario", FormMethod.Post, new AjaxOptions { LoadingElementId = "Progress", InsertionMode = InsertionMode.Replace, UpdateTargetId = "Contenedor", OnSuccess = "onSuccessEditarUsuario", OnFailure = "onFailureAjax" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.idUsuario, new { htmlAttributes = new { @class = "form-control", id = "idUsuarioE", @style = "display:none;" } })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control", id = "NombreUsuarioE" , @required = "required"} })
+                @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.contrasena, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.contrasena, new { htmlAttributes = new { @class = "form-control", id = "contrasenaUsuarioE" , @required = "required",Type="password"} })
+                @Html.ValidationMessageFor(model => model.contrasena, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.idTarjeta, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.idTarjeta, new { htmlAttributes = new { @class = "form-control", id = "idTarjetaUsuarioE", Type="password" } })
+                @Html.ValidationMessageFor(model => model.idTarjeta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Correo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "form-control", id = "CorreoUsuarioE" } })
+                @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.idRol, "idRol", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(Model => Model.idRol, new SelectList((System.Collections.IEnumerable)ViewData["TipoRolUsuario"], "idRol", "nombre"), "Seleccionar", htmlAttributes: new { @class = "form-control", @required = "required", id = "idRolUsuarioE" })
+                @Html.ValidationMessageFor(model => model.idRol, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.activo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.CheckBox("activoUsuarioE" , new { htmlAttributes = new { @class = "form-control"} })
+                    @Html.ValidationMessageFor(model => model.activo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.resetContrasena, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.CheckBox("resetContrasenaUsuarioE", new { htmlAttributes = new { @class = "form-control"} })
+                    @Html.ValidationMessageFor(model => model.resetContrasena, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EnvioCorreo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.CheckBox("EnvioCorreoUsuarioE", new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EnvioCorreo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guarda</button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function onSuccessEditarUsuario(Info) {
+       if (Info.Tipo =="js") {
+
+            window.alert(Info.Mensaje)
+        }
+        else {
+         $("#ModalEditarUsuario").modal("hide")
+        }
+
+    }
+</script>

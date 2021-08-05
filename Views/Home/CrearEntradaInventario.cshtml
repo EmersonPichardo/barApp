@@ -1,0 +1,59 @@
+﻿@model barApp.Inventario
+
+@using (Ajax.BeginForm("CrearEntrdaInventario", FormMethod.Post, new AjaxOptions { LoadingElementId = "Progress", InsertionMode = InsertionMode.Replace, UpdateTargetId = "Contenedor", OnSuccess = "onSuccessCrearEntrdaInventario", OnFailure = "onFailureAjax" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Producto", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("idProducto", new SelectList((System.Collections.IEnumerable)ViewData["Producto"], "idProducto", "nombre"), "Seleccionar", htmlAttributes: new { @class = "form-control",@required="required" })
+                @Html.ValidationMessageFor(model => model.idProducto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Suplidor", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("idSuplidor", new SelectList((System.Collections.IEnumerable)ViewData["Suplidor"], "idSuplidor", "nombre"), "Seleccionar", htmlAttributes: new { @class = "form-control", @required = "required" })
+                @Html.ValidationMessageFor(model => model.idSuplidor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.Label("Cantidad", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.cantidad, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.cantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guarda</button>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+    function onSuccessCrearEntrdaInventario() {
+
+        $("#inlineRadio1").prop("checked", true);
+        $("#NuevaEntradaInventario").modal("hide")
+    }
+</script>
+
+
+<script>
+    function onFailureAjax() {
+
+        $("#NuevaEntradaInventario").modal("hide")
+    }
+</script>

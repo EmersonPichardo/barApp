@@ -1,0 +1,100 @@
+﻿
+@if (ViewData["Alert"] != null)
+{
+    var viewDataMyObj = ViewData["Alert"] as barApp.Models.InfoMensaje;
+
+    if (viewDataMyObj.Tipo == "Success")
+    {
+        <script>
+
+            $("#MensajeSuccess").html("@viewDataMyObj.Mensaje");
+            $('#ModalSuccess').modal('show');
+
+        </script>
+
+    }
+    else if (viewDataMyObj.Tipo == "Error")
+    {
+        <script>
+
+            $("#MensajeError").html("@viewDataMyObj.Mensaje");
+            $('#ModalError').modal('show');
+
+        </script>
+    }
+    else if (viewDataMyObj.Tipo == "Warning")
+    {
+        <script>
+
+             $("#MensajeWarning").html("@viewDataMyObj.Mensaje");
+            $('#ModalWarning').modal('show');
+
+
+        </script>
+    }
+
+}
+
+@*Modal Error............................................................................................................................*@
+<div class="modal fade" id="ModalError" tabindex="-1" role="dialog" aria-labelledby="ModalError" aria-hidden="true" data-backdrop="true" data-keyboard="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle"><span class="fas fa-comments fa-2x text-danger"> Mensaje</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span class="fa fa-bars"></span> <p id="MensajeError"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Modal Success..........................................................................................................................*@
+<div class="modal fade" id="ModalSuccess" tabindex="-1" role="dialog" aria-labelledby="ModalSuccess" aria-hidden="true" data-backdrop="true" data-keyboard="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle"><span class="fas fa-comments fa-2x text-success"> Mensaje</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span class="fa fa-bars"></span> <p id="MensajeSuccess"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Modal Warning............................................................................................................................*@
+<div class="modal fade" id="ModalWarning" tabindex="-1" role="dialog" aria-labelledby="ModalWarning" aria-hidden="true" data-backdrop="true" data-keyboard="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle"><span class="fas fa-comments fa-2x text-warning"> Mensaje</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span class="fa fa-bars"></span> <p id="MensajeWarning"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>

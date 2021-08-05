@@ -1,0 +1,56 @@
+﻿@model IEnumerable<barApp.Gastos>
+
+
+@if (ViewData["ListaGastos"] != null)
+{
+    <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+
+        <tr class="odd">
+            <th>
+               Id
+            </th>
+            <th>
+               Descripcion
+            </th>
+            <th>
+               Cantidad
+            </th>
+            
+            <th>Opciones</th>
+        </tr>
+
+        @foreach (var item in ViewData["ListaGastos"] as IEnumerable<barApp.Gastos>)
+        {
+            <tr class="odd">
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdGastos)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cantidad)
+                </td>
+                <td>
+                    <button data-toggle="modal" onclick="myfunction()" class="btn btn-link" data-target="#ModalEditarGastos"> <i class="fas fa-edit fa-1x"></i> </button>
+                    @Ajax.ActionLink(" ", "EliminarGastos", "Home", new { id = item.IdGastos }, new AjaxOptions()
+               {
+                   HttpMethod = "POST",
+                   UpdateTargetId = "Contenedor",
+                   InsertionMode = InsertionMode.Replace,
+                   LoadingElementId = "progress",
+
+                   //OnBegin = "onBeginAjax",
+                   //OnComplete = "onCompleteAjax",
+                   OnSuccess = "onSuccessEliminar",
+                   OnFailure = "onFailureAjax",
+               }, new { @class = "fa fa-eraser fa-1x text-danger" })
+
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+    @{Html.RenderPartial("ModalMessenge", ViewData["Alert"] as barApp.Models.InfoMensaje);}

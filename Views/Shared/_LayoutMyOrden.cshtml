@@ -1,0 +1,570 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<!-- Basic -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Site Metas -->
+    <title>Ordenar</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="~/css/keyboard.css" />
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="~/styleOrden/images/" type="image/x-icon">
+    <link rel="apple-touch-icon" href="~/styleOrden/images/apple-touch-icon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/styleOrden/css/bootstrap.min.css">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="~/styleOrden/css/style.css">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="~/styleOrden/css/responsive.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/styleOrden/css/custom.css">
+
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <!-- Start header -->
+    <header class="top-navbar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <img src="images/logo.png" alt="" />
+                </a>
+                <span class="text-dark">Vendedor: @Session["Usuario"]</span>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-rs-food" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbars-rs-food">
+                    <ul class="navbar-nav ml-auto">
+                        @*<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>*@
+                        <li class="nav-item active"><a class="nav-link" href="#">Ordenes</a></li>
+
+                        <li class="nav-item"> <a class="nav-link" onclick="NuevaOrden()" data-toggle="modal" data-target="#NuevaOrden">Nueva Orden</a></li>
+                        @*<li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="dropdown-a" data-toggle="dropdown">Pages</a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown-a">
+                                    <a class="dropdown-item" href="reservation.html">Reservation</a>
+                                    <a class="dropdown-item" href="stuff.html">Stuff</a>
+                                    <a class="dropdown-item" href="gallery.html">Gallery</a>
+                                </div>
+                            </li>*@
+                        @*<li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="dropdown-a" data-toggle="dropdown">Blog</a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown-a">
+                                    <a class="dropdown-item" href="blog.html">blog</a>
+                                    <a class="dropdown-item" href="blog-details.html">blog Single</a>
+                                </div>
+                            </li>*@
+                        <li class="nav-item"><a class="nav-link" href="~/Login/Salir">Salir</a></li>
+                    </ul>
+                </div>
+
+
+
+            </div>
+        </nav>
+    </header>
+    <!-- End header -->
+    <!-- Start All Pages -->
+    @*<div class="all-page-title page-breadcrumb">
+        <div class="container text-center">*@
+    <div class="row">
+        <div class="col-lg-12">
+            <h1></h1>
+        </div>
+    </div>
+    @*</div>
+        </div>*@
+    <!-- End All Pages -->
+    <!-- Start Menu -->
+
+    @RenderBody()
+
+    <!-- End Menu -->
+    <!-- Start QT -->
+    @*<div class="qt-box qt-background">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 ml-auto mr-auto text-center">
+                        <p class="lead ">
+                            " If you're not the one cooking, stay out of the way and compliment the chef. "
+                        </p>
+                        <span class="lead">Michael Strahan</span>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <!-- End QT -->
+    <!-- Start Customer Reviews -->
+    @*<div class="customer-reviews-box">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="heading-title text-center">
+                            <h2>Customer Reviews</h2>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 mr-auto ml-auto text-center">
+                        <div id="reviews" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner mt-4">
+                                <div class="carousel-item text-center active">
+                                    <div class="img-box p-1 border rounded-circle m-auto">
+                                        <img class="d-block w-100 rounded-circle" src="images/quotations-button.png" alt="">
+                                    </div>
+                                    <h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Paul Mitchel</strong></h5>
+                                    <h6 class="text-dark m-0">Web Developer</h6>
+                                    <p class="m-0 pt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu sem tempor, varius quam at, luctus dui. Mauris magna metus, dapibus nec turpis vel, semper malesuada ante. Idac bibendum scelerisque non non purus. Suspendisse varius nibh non aliquet.</p>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <div class="img-box p-1 border rounded-circle m-auto">
+                                        <img class="d-block w-100 rounded-circle" src="images/quotations-button.png" alt="">
+                                    </div>
+                                    <h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Steve Fonsi</strong></h5>
+                                    <h6 class="text-dark m-0">Web Designer</h6>
+                                    <p class="m-0 pt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu sem tempor, varius quam at, luctus dui. Mauris magna metus, dapibus nec turpis vel, semper malesuada ante. Idac bibendum scelerisque non non purus. Suspendisse varius nibh non aliquet.</p>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <div class="img-box p-1 border rounded-circle m-auto">
+                                        <img class="d-block w-100 rounded-circle" src="images/quotations-button.png" alt="">
+                                    </div>
+                                    <h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Daniel vebar</strong></h5>
+                                    <h6 class="text-dark m-0">Seo Analyst</h6>
+                                    <p class="m-0 pt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu sem tempor, varius quam at, luctus dui. Mauris magna metus, dapibus nec turpis vel, semper malesuada ante. Idac bibendum scelerisque non non purus. Suspendisse varius nibh non aliquet.</p>
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#reviews" role="button" data-slide="prev">
+                                <i class="fa fa-angle-left" aria-hidden="true"></i>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#reviews" role="button" data-slide="next">
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <!-- End Customer Reviews -->
+    <!-- Start Contact info -->
+    @*<div class="contact-imfo-box">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 arrow-right">
+                        <i class="fa fa-volume-control-phone"></i>
+                        <div class="overflow-hidden">
+                            <h4>Phone</h4>
+                            <p class="lead">
+                                +01 123-456-4590
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 arrow-right">
+                        <i class="fa fa-envelope"></i>
+                        <div class="overflow-hidden">
+                            <h4>Email</h4>
+                            <p class="lead">
+                                yourmail@gmail.com
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="fa fa-map-marker"></i>
+                        <div class="overflow-hidden">
+                            <h4>Location</h4>
+                            <p class="lead">
+                                800, Lorem Street, US
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <!-- End Contact info -->
+    <!-- Start Footer -->
+    @*<footer class="footer-area bg-f">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <h3>About Us</h3>
+                        <p>Integer cursus scelerisque ipsum id efficitur. Donec a dui fringilla, gravida lorem ac, semper magna. Aenean rhoncus ac lectus a interdum. Vivamus semper posuere dui.</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h3>Subscribe</h3>
+                        <div class="subscribe_form">
+                            <form class="subscribe_form">
+                                <input name="EMAIL" id="subs-email" class="form_input" placeholder="Email Address..." type="email">
+                                <button type="submit" class="submit">SUBSCRIBE</button>
+                                <div class="clearfix"></div>
+                            </form>
+                        </div>
+                        <ul class="list-inline f-social">
+                            <li class="list-inline-item"><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                            <li class="list-inline-item"><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                            <li class="list-inline-item"><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                            <li class="list-inline-item"><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+                            <li class="list-inline-item"><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h3>Contact information</h3>
+                        <p class="lead">Ipsum Street, Lorem Tower, MO, Columbia, 508000</p>
+                        <p class="lead"><a href="#">+01 2000 800 9999</a></p>
+                        <p><a href="#"> info@admin.com</a></p>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h3>Opening hours</h3>
+                        <p><span class="text-color">Monday: </span>Closed</p>
+                        <p><span class="text-color">Tue-Wed :</span> 9:Am - 10PM</p>
+                        <p><span class="text-color">Thu-Fri :</span> 9:Am - 10PM</p>
+                        <p><span class="text-color">Sat-Sun :</span> 5:PM - 10PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p class="company-name">
+                                All Rights Reserved. &copy; 2018 <a href="#">Live Dinner Restaurant</a> Design By :
+                                <a href="https://html.design/">html design</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </footer>*@
+    <!-- End Footer -->
+    @*Nueva Orden*@
+
+
+
+    <a href="#" id="back-to-up" title="Back to top"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
+    <a href="#" id="back-to-top" title="Back to top" style="display: none;"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
+
+    <!-- ALL JS FILES -->
+    <script src="~/styleOrden/js/jquery-3.2.1.min.js"></script>
+    <script src="~/styleOrden/js/popper.min.js"></script>
+    <script src="~/styleOrden/js/bootstrap.min.js"></script>
+    <!-- ALL PLUGINS -->
+    <script src="~/styleOrden/js/jquery.superslides.min.js"></script>
+    <script src="~/styleOrden/js/images-loded.min.js"></script>
+    <script src="~/styleOrden/js/isotope.min.js"></script>
+    <script src="~/styleOrden/js/baguetteBox.min.js"></script>
+    <script src="~/styleOrden/js/form-validator.min.js"></script>
+    <script src="~/styleOrden/js/contact-form-script.js"></script>
+    <script src="~/styleOrden/js/custom.js"></script>
+    <script src="~/Scripts/jquery.keyboard.js"></script>
+
+    @*<script src="~/Assets/bootstrap/js/bootstrap.min.js"></script>*@
+
+
+
+
+    <script type="text/javascript">
+
+
+
+
+        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+        $(document).ready(function () {
+
+            $("a[rel='pop-up']").click(function () {
+                var caracteristicas = "height=550,width=1000,scrollTo,resizable=1,scrollbars=1,location=0";
+                nueva = window.open(this.href, 'popup', caracteristicas);
+
+
+                return false;
+            });
+            //botones
+            $("#finalizar").click(function () {
+                //alertify.alert("Boton Iniciado");
+                //console.info('hola');
+                var i = 0;
+                var envio = "{Fecha:'" + $("#id_fecha").val() + "',ModoPago:'" + $("#modoPago").val() + "',IdCliente:'" + $("#codigoCliente").val() + "',IdCabecera:'2',Total:'" + $('#TotalaPagar').val() + "',";
+                $("#detalle tbody tr").each(function (index) {
+                    if (i == 0) {
+                        envio += "ListadoDetalle:[{IdProducto:'" + $(this).find('td').eq(0).text() +
+                            "',Cantidad:'" + $(this).find('td').eq(2).text() +
+                            "',Descuento:'" + $(this).find('td').eq(4).text() +
+                            "',SubTotal:'" + $(this).find('td').eq(5).text() + "'}";
+                    } else {
+                        envio += ",{IdProducto:'" + $(this).find('td').eq(0).text() +
+                            "',Cantidad:'" + $(this).find('td').eq(2).text() +
+                            "',Descuento:'" + $(this).find('td').eq(4).text() +
+                            "',SubTotal:'" + $(this).find('td').eq(5).text() + "'}"
+                    }
+                    i = 1;
+                });
+                envio += "]}";
+
+                var json = eval("(" + envio + ')');
+
+                //alertify.alert("INGRESE DATOS");
+                console.info(json);
+
+                $.ajax({
+                    url: "GuardarVenta",
+                    data: JSON.stringify(json),
+                    type: "POST",
+                    async: false,//this makes the ajax-call blocking
+                    contentType: 'application/json;charset=UTF-8',
+                    dataType: 'json',
+                    success: function (response) {
+                        alertify.alert(response);
+                        valid = response.valid;
+                    },
+                    error: function (error) {
+                        alertify.alert(error);
+
+                    }
+                });
+            });
+
+        });
+        //variables
+        var total = 0;
+        var valor = 0;
+        var subtotal = 0;
+
+        var watchclose
+        function obtenerCliente(Cliente) {
+            clearInterval(watchclose);
+            watchclose = setInterval(function () {
+                $("#Nombre").val(Cliente.DatosPersonales);
+                $("#Cedula").val(Cliente.Identificacion);
+                $("#codigoCliente").val(Cliente.Codigo);
+                $("#Apellido").val(Cliente.Apellido);
+                $("#Referencia").val(Cliente.Referencia);
+
+                //$("#Nombre").prop('disabled', true);
+                //$("#Cedula").prop('disabled', true);
+                //$("#codigoCliente").prop('disabled', true);
+                //$("#Apellido").prop('disabled', true);
+                //$("#Referencia").prop('disabled', true);
+            })
+
+
+
+        }
+
+        function NuevaOrden() {
+            document.getElementById("lblMesa").innerHTML=""
+            $("#Nombre").val('');
+            $("#Cedula").val('');
+            $("#codigoCliente").val('');
+            $("#Apellido").val('');
+            $("#Referencia").val('');
+            clearInterval(watchclose);
+            watchclose = setInterval(function () {
+
+                // $("#Nombre").val('');
+                //$("#Cedula").val('');
+                //$("#codigoCliente").val('');
+                //$("#Apellido").val('');
+                //$("#Referencia").val('');
+
+                //$("#Nombre").prop('disabled', false);
+                //$("#Cedula").prop('disabled', false);
+                //$("#codigoCliente").prop('disabled', false);
+                //$("#Apellido").prop('disabled', false);
+                //$("#Referencia").prop('disabled', false);
+
+
+
+
+            })
+            //document.getElementById("FrmNuevoCliente").reset();
+        }
+
+
+        function fn_agregar() {
+
+
+
+            cadena = "<tr>"
+            cadena = cadena + "<td>" + $("#idproducto").val() + "</td>";
+            cadena = cadena + "<td>" + $("#nombreproducto").val() + "</td>";
+            cadena = cadena + "<td>" + $("#cantidad").val() + "</td>";
+            cadena = cadena + "<td>" + $("#precio").val() + "</td>";
+            //cadena = cadena + "<td>" + $("#descuento").val() + "</td>";
+
+            var y = 0;
+            var x = 0;
+            var des = 0;
+            y = $("#cantidad").val();
+            x = $("#precio").val();
+            des = 0;
+            subtotal = (x * y) - des;
+            cadena = cadena + "<td>" + subtotal + "</td>"
+            cadena = cadena + "<td><a class ='elimina'><button class='btn btn-danger' type='button'><span class='fa fa-remove'></span></button></a></td>";
+            $("#detalle tbody").append(cadena);
+            sumar();
+            fn_dar_eliminar();
+            limpiarCliente();
+            limpiar();
+
+
+        };
+        function limpiar() {
+            $("#nombreproducto").val("");
+            $("#idproducto").val("");
+            $("#precio").val("");
+            $("#ListaProducto").val("");
+            $("#cantidad").val("");
+            $("#descuento").val("");
+        }
+        function limpiarCliente() {
+            $("tbody tr #txtnombre").val('');
+            $("tbody tr #idCliente").val('');
+            $("tbody tr #codigoCliente").val('');
+        }
+        function limpiarDetalle() {
+            $("#detalle tbody tr").val("");
+        }
+        function sumar() {
+            total = total + subtotal;
+            console.info(total);
+            $("#TotalaPagar").val(total);
+
+        }
+        function restar() {
+            total = total - valor;
+            $("#TotalaPagar").val(total);
+        }
+        function fn_dar_eliminar() {
+            $("a.elimina").click(function () {
+                valor = $(this).parents("tr").find("td").eq(4).html();
+
+                $(this).parents("tr").fadeOut("normal", function () {
+                    $(this).remove();
+                    restar();
+                });
+            });
+        };
+
+
+
+
+
+
+
+    </script>
+
+
+    <div id="progress" class="modal">
+        <div class="parentDiv">
+            <img class="parentDiv" src="~/Resource/unnamed.gif" />
+        </div>
+    </div>
+
+    <style>
+        #Gif {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .parentDiv {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+
+
+
+    <style>
+
+        /* The side navigation menu */
+        .sidenav {
+            height: 100%; /* 100% Full-height */
+            width: 0; /* 0 width - change this with JavaScript */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Stay on top */
+            top: 0;
+            left: 0;
+            background-color: #4e73df; /* Black*/
+            overflow-x: hidden; /* Disable horizontal scroll */
+            padding-top: 60px; /* Place content 60px from the top */
+            transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+        }
+
+            /* The navigation menu links */
+            .sidenav button {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 20px;
+                color: #ded0d0;
+                display: block;
+                transition: 0.3s;
+                background-color: transparent;
+                border-style: none;
+            }
+
+            /* When you mouse over the navigation links, change their color */
+            .sidenav a:hover {
+                color: #f1f1f1;
+            }
+
+            /* Position and style the close button (top right corner) */
+            .sidenav .closebtn {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }
+
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s;
+            padding: 20px;
+        }
+
+        /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+        @@media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+
+                .sidenav a {
+                    font-size: 18px;
+                }
+        }
+    </style>
+
+
+
+
+    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+</body>
+</html>
+
+
+
+

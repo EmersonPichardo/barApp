@@ -1,0 +1,48 @@
+﻿
+@if (ViewData["ListaInventario"] != null)
+{
+
+    <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+
+        <tr class="odd">
+            <th>
+               Codigo
+            </th>
+            <th>
+               Nombre
+            </th>
+            <th>
+               Existencia
+            </th>
+            <th>Transferir</th>
+        </tr>
+
+        @foreach (var item in ViewData["ListaInventario"] as IEnumerable<barApp.Models.Inventario>)
+        {
+            <tr class="odd">
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdProducto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad)
+                </td>
+                <td>
+                    @if (@ViewData["TransferirVista"] != null)
+                    {
+                        <button data-toggle="modal" onclick="myfunction()" class="btn btn-link" data-target="#ModalTransferirProductoABAR"> <i class="fas fa-arrow-alt-circle-down fa-1x"></i> </button>
+                    }
+
+
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+
+
+@{Html.RenderPartial("ModalMessenge", ViewData["Alert"] as barApp.Models.InfoMensaje);}

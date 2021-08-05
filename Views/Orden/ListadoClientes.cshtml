@@ -1,0 +1,30 @@
+﻿
+<div id="ListaCliente">
+    <div class="row">
+        <div id="mySidenav" class="sidenav">
+            <br />
+            <br />
+            <span class="text-white">Ordenes:</span>
+            <br />
+            @*<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>*@
+
+
+            @*@using (Ajax.BeginForm("Index", "Orden", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivUserList", LoadingElementId = "progress", InsertionMode = InsertionMode.Replace }))
+                {*@
+
+            @foreach (var item in (ViewData["ListadoClienteOrdenar"] as IEnumerable<Venta>))
+            {
+
+                <button name="btnCliente" onclick="mostrarCliente('@item.Cliente.nombre',@item.total,@item.idVenta )" value=@item.idVenta>@item.Cliente.nombre.ToUpper()</button>
+
+            }
+
+            @*}*@
+
+        </div>
+    </div>
+</div>
+   
+<script>
+        document.getElementById("mySidenav").style.width = "250px";
+</script>

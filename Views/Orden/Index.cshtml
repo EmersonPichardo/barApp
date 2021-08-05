@@ -1,0 +1,1114 @@
+﻿
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutMyOrden.cshtml";
+    ViewBag.Title = "Sistema Ventas Orden";
+
+}
+<link href="~/css/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/vendor/jquery/jquery.min.js"></script>
+@*<script src="~/Js/alertify.min.js"></script>
+    <link href="~/Css/alertify.core.css" rel="stylesheet" />
+    <link href="~/Css/alertify.default.css" rel="stylesheet" />*@
+
+<link rel="stylesheet" href="~/css/keyboard.css" />
+<link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+<div id="DivUserList1">
+
+
+    <div id="main" class="menu-box">
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="heading-title text-center">
+                        <br />
+                        @*<h2>Menu</h2>*@
+                        @*<p></p>*@
+                    </div>
+                    @*<span onclick="openNav()">Mostrar Clientes</span> <br />*@
+
+                    <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+                    @*<div id="main">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><<<</a>
+                </div>*@
+                    <span class="fa fa-shopping-cart">Menu</span>  <hr />
+                </div>
+            </div>
+
+
+            <div class="row inner-menu-box">
+
+
+
+
+                <div class="col-3">
+
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-Restaurante" role="tab" aria-controls="v-pills-Restaurante" aria-selected="true">Restaurante</a>
+                        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-Bar" role="tab" aria-controls="v-pills-Bar" aria-selected="false">Bar</a>
+                        @*<a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-Especiales" role="tab" aria-controls="v-pills-Especiales" aria-selected="false">Especiales</</a>*@
+                        @*<a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-Especiales" role="tab" aria-controls="v-pills-Especiales" aria-selected="false">Especiales</a>*@
+                    </div>
+                </div>
+
+                <div class="col-9">
+                    <div class="tab-content" id="v-pills-tabContent">
+
+                        @*restaurante*@
+                        <div class="tab-pane fade show active" id="v-pills-Restaurante" role="tabpanel" aria-labelledby="v-pills-Restaurante-tab">
+                            <div class="row">
+
+                                @foreach (var person in ViewBag.Categoria)
+                                {
+
+                                    if (person.idTipoCategoria == 2)
+                                    {
+                                        <div class="col-lg-4 col-md-6 special-grid drinks">
+                                            <div class="img-fluid gallery-single fix">
+
+                                                <div>
+                                                    @*<img src="~/styleOrden/images/img-01.jpg" class="img-fluid" alt="Image">*@
+                                                    <div>
+                                                        @{
+                                                            string categoria = "Categoria" + person.idCategoria;
+                                                        }
+                                                        <button type="button" data-toggle="modal" data-target="#@categoria" class="btn btn-dark col-lg-12 col-md-8">@person.nombre</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        //producto
+
+
+
+                                        string categoria1 = "Categoria" + person.idCategoria;
+
+
+                                        <div id=@categoria1 class="modal fade" role="document">
+                                            <div class="modal-dialog  modal-lg" style="overflow:visible">
+
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-secondary">
+
+                                                        <h4 class="modal-title" style="color:aliceblue">@person.nombre</h4>
+                                                    </div>
+                                                    <div class="modal-body" style="width:700px; height:500px;overflow:auto">
+
+                                                        <div class="col-lg-10 col-md-10 special-grid drinks">
+                                                            @foreach (var item in ViewBag.Producto)
+                                                            {
+
+                                                                if (Convert.ToInt32(item.idCategoria) == Convert.ToInt32(person.idCategoria))
+                                                                {
+
+
+                                                                    <button id="@item.idProducto" data-dismiss="modal" data-toggle="modal" data-target="#CantidadProducto" value="@item.precioVenta" onclick="AsignarCodigo('@item.idProducto')" class="btn btn-dark">@item.nombre <span class="fa fa-shopping-cart"></span> </button>
+                                                                    <br />
+
+                                                                    <br />
+
+                                                                    @*<td onclick="cc()" data-dismiss="modal">@item.idProducto</td>
+                                                                <td onclick="cc()" data-dismiss="modal">@item.nombre</td>
+                                                                <td onclick="cc()" data-dismiss="modal">@item.precioVenta</td>
+                                                                <td><input style="width:70px; height:50px; font-size:40px" type="number" name="name" value="1" /></td>*@
+
+
+
+                                                                }
+                                                            }
+                                                        </div>
+
+                                                        @*<table id="tbdetalleProducto" class="table table-striped" style="overflow-y:visible">
+
+
+                                                        <thead style="font-size:16px;">
+                                                            <tr class="bg-danger">
+                                                                <th>Id</th>
+                                                                <th>Nombre</th>
+                                                                <th>Precio</th>
+                                                                <th>Cantidad</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in ViewBag.Producto)
+                                                            {
+                                                                if (Convert.ToInt32(item.idCategoria) == Convert.ToInt32(person.idCategoria))
+                                                                {
+
+                                                                    <tr>
+                                                                        <td onclick="cc()" data-dismiss="modal">@item.idProducto</td>
+                                                                        <td onclick="cc()" data-dismiss="modal">@item.nombre</td>
+                                                                        <td onclick="cc()" data-dismiss="modal">@item.precioVenta</td>
+                                                                        <td><input style="width:70px; height:50px; font-size:40px" type="number" name="name" value="1" /></td>
+
+                                                                    </tr>
+
+                                                                }
+                                                            }
+                                                        </tbody>
+
+
+
+                                                    </table>*@
+
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                    }
+
+                                }
+
+
+                            </div>
+
+
+                        </div>
+
+                        @*bar*@
+
+                        <div class="tab-pane fade" id="v-pills-Bar" role="tabpanel" aria-labelledby="v-pills-Bar-tab">
+                            <div class="row">
+
+                                @foreach (var person in ViewBag.Categoria)
+                                {
+
+                                    if (person.idTipoCategoria == 1)
+                                    {
+                                        <div class="col-lg-4 col-md-6 special-grid drinks">
+                                            <div class="img-fluid gallery-single fix">
+
+                                                <div>
+                                                    @*<img src="~/styleOrden/images/img-01.jpg" class="img-fluid" alt="Image">*@
+                                                    <div>
+                                                        @{
+                                                            string categoria = "Categoria" + person.idCategoria;
+                                                        }
+                                                        <button type="button" data-toggle="modal" data-target="#@categoria" class="btn btn-dark col-lg-12 col-md-8">@person.nombre</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        //producto
+
+
+                                        string categoria1 = "Categoria" + person.idCategoria;
+
+
+                                        <div id=@categoria1 class="modal fade" role="document">
+                                            <div class="modal-dialog modal-lg" style="overflow:visible">
+
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-secondary">
+
+                                                        <h4 class="modal-title" style="color:aliceblue">@person.nombre</h4>
+                                                    </div>
+                                                    <div class="modal-body" style="width:700px; height:500px;overflow:auto">
+
+                                                        <div class="col-lg-10 col-md-10 special-grid drinks">
+                                                            @foreach (var item in ViewBag.Producto)
+                                                            {
+
+                                                                if (Convert.ToInt32(item.idCategoria) == Convert.ToInt32(person.idCategoria))
+                                                                {
+
+
+                                                                    <button id="@item.idProducto" data-dismiss="modal" data-toggle="modal" data-target="#CantidadProducto" value="@item.idProducto" onclick="AsignarCodigo('@item.idProducto')" class="btn btn-dark">@item.nombre <span class="fa fa-shopping-cart"></span> </button>
+                                                                    <br />
+
+                                                                    <br />
+
+                                                                    @*<td onclick="cc()" data-dismiss="modal">@item.idProducto</td>
+                                                                <td onclick="cc()" data-dismiss="modal">@item.nombre</td>
+                                                                <td onclick="cc()" data-dismiss="modal">@item.precioVenta</td>
+                                                                <td><input style="width:70px; height:50px; font-size:40px" type="number" name="name" value="1" /></td>*@
+
+
+
+                                                                }
+                                                            }
+                                                        </div>
+
+
+                                                        @*<table id="tbdetalleProducto" class="table table-light" style="overflow-y:visible">
+                                                        <thead style="font-size:16px;">
+
+                                                            <tr class="bg-danger">
+                                                                <th>Id</th>
+                                                                <th>Nombre</th>
+                                                                <th>Precio</th>
+                                                                <th>Cantidad</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in ViewBag.Producto)
+                                                            {
+                                                                if (Convert.ToInt32(item.idCategoria) == Convert.ToInt32(person.idCategoria))
+                                                                {
+                                                                    <tr>
+                                                                        <td onclick="cc()" data-dismiss="modal">@item.idProducto</td>
+                                                                        <td onclick="cc()" data-dismiss="modal">@item.nombre</td>
+                                                                        <td onclick="cc()" data-dismiss="modal">@item.precioVenta</td>
+                                                                        <td><input style="width:70px; height:50px; font-size:40px" type="number" name="name" value="1" /></td>
+
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+
+                                                        <tbody></tbody>
+
+                                                    </table>*@
+
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                    }
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        @*Especiales*@
+
+                        @*<div class="tab-pane fade" id="v-pills-Especiales" role="tabpanel" aria-labelledby="v-pills-Especiales-tab">
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 special-grid drinks">
+                                <div class="img-fluid gallery-single fix">
+
+                                    <div>
+                                        <img src="~/styleOrden/images/img-01.jpg" class="img-fluid" alt="Image">
+                                        <div>
+
+                                            <button type="submit" data-toggle="modal" data-target="#Espciales" class="btn btn-dark col-lg-12 col-md-8">Especiales</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        producto
+
+                        <div id="Espciales" class="modal fade" role="document">
+                            <div class="modal-dialog">
+
+                                 Modal content
+                                <div class="modal-content" style="width:700px; height:500px; overflow:visible">
+                                    <div class="modal-header bg-secondary">
+
+                                        <h4 class="modal-title" style="color:aliceblue">Especiales</h4>
+                                    </div>
+                                    <div class="modal-body" style="width:700px; height:500px;overflow:auto">
+
+
+                                        <table id="tbdetalleProducto" class="table table-light" style="overflow-y:visible">
+                                            <thead style="font-size:16px;">
+
+                                                <tr class="bg-danger">
+                                                    <th>Id</th>
+                                                    <th>Nombre</th>
+                                                    <th>Precio</th>
+                                                    <th>Cantidad</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in ViewBag.Especial)
+                                                {
+                                                    <tr>
+                                                        <td onclick="cc()" data-dismiss="modal">@item.IdProducto</td>
+                                                        <td onclick="cc()" data-dismiss="modal">@item.Descripcion</td>
+                                                        <td onclick="cc()" data-dismiss="modal">@item.Precio</td>
+                                                        <td><input style="width:70px; height:50px; font-size:40px" type="number" name="name" value="1" /></td>
+
+                                                    </tr>
+
+                                                }
+                                            </tbody>
+
+                                            <tbody></tbody>
+
+                                        </table>
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>*@
+
+                    </div>
+                </div>
+
+
+            </div>
+            <hr />
+
+
+
+
+            <span class="text align-text-top text-dark mx-md-3 fa fa-user" style="border:none"> Cliente:</span> <input style="font-size:20px; font-weight:900; width:35%" type="text" ng-model="Nombre" name="txtnombre" id="txtnombre" readonly required />
+
+            <span class="text align-text-top text-dark mx-md-3 fa" style="border:none">No. Orden:</span><input style="font-size:20px; font-weight:900; width:10%" type="text" id="idVentas" ng-model="idVentas" readonly required />
+
+            <div style="float:right">
+                @*@using (Ajax.BeginForm("Index", "Orden", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivUserList", LoadingElementId = "progress", InsertionMode = InsertionMode.Replace }))
+                {*@
+
+                    @*<input type="button" class="btn btn-light" name="name" value="Imprimir" />*@
+
+                    <input type="submit" class="btn btn-warning" id="Despachar" name="btnOrden" value="Despachar" />
+                @*}*@
+            </div>
+
+            <div style="float:right" ng-app="">
+                @using (Ajax.BeginForm("PreFactura", "Orden", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivUserList1", LoadingElementId = "progress", InsertionMode = InsertionMode.Replace }))
+                {
+
+
+                    <input type="submit" class="btn btn-info" id="prefactura" name="btnOrden" ng-click="idVentas='fff'" value="Pre-Factura" />
+
+
+
+                }
+
+            </div>
+
+
+            <div id="ListaCliente">
+                @Html.Partial("ListadoClientes", ViewData["ListadoClienteOrdenar"])
+
+            </div>
+
+            <div id="DivUserList">
+
+
+
+                @Html.Partial("ListadoDeOrdenes")
+
+                <table class="table">
+                    <tr>
+
+                        <td style="float:right;font-size:20px;">Total a Pagar</td>
+                        <th></th>
+                        <td><input style="font-size:20px; font-weight:700;" class="form-control" type="text" name="TotalaPagar" id="TotalaPagar" required readonly /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+</div>
+<script src="~/Scripts/jquery.keyboard.js"></script>
+<script type="text/javascript">
+
+
+
+    // function prefactura() {
+
+    //      $("#txtnombre").val("");
+    //        $("#TotalaPagar").val("");
+    //        $("#idVentas").val("");
+    //    $.ajax({
+    //            url: "Orden/PreFactura",
+    //            //data: JSON.stringify(json),
+    //            type: "GET",
+    //            async: false,//this makes the ajax-call blocking
+    //            contentType: 'application/json;charset=UTF-8',
+    //            dataType: 'json',
+    //            success: function (response) {
+    //                alertify.alert(response);
+    //                valid = response.valid;
+    //            },
+
+    //    });
+
+
+
+    //}
+
+    function Bajar() {
+
+
+        $(window).on('scroll', function () {
+            if ($(this).scrollTop() < 10) {
+                $('#back-to-up').fadeIn();
+            } else {
+                $('#back-to-up').fadeOut();
+            }
+        });
+
+        $("html, body").animate({ scrollTop: 20000 }, 600);
+        return false;
+
+
+    }
+
+
+    function mostrarCliente(nombre, TotalPagar, idVentas) {
+
+        TotalPagar = 0;
+
+        $.ajax({
+            url: "../Orden/Total?Id=" + idVentas,
+            type: "GET",
+            async: false,//this makes the ajax-call blocking
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function (Total) {
+                TotalPagar += Total;
+            },
+
+        });
+
+
+        Bajar();
+        subtotal = 0;
+        total = TotalPagar;
+        sumar();
+
+        clearInterval(watchclose);
+        watchclose = setInterval(function () {
+            //document.getElementById("txtnombre").value = "";
+            //document.getElementById("idVentas").value = "";
+            $("#txtnombre").val(nombre);
+            $("#TotalaPagar").val(total);
+            $("#idVentas").val(idVentas);
+        });
+
+        $.ajax({
+            url: "../Orden/IndexDetalles?Id=" + idVentas,
+            type: "POST",
+            async: false,//this makes the ajax-call blocking
+            contentType: 'application/json;charset=UTF-8',
+
+            success: function (Response) {
+                $("#detalle").html(Response);
+                //detalle
+            }
+
+        });
+
+    }
+    function cc() {
+
+
+        var nombreCliente = document.getElementById("txtnombre").value;
+        var CantidadPp = document.getElementById("CantiadP").value;
+
+        if (CantidadPp) {
+
+
+
+
+            if (nombreCliente) {
+
+
+                var Cod = document.getElementById("CodigoProductoCantidad").innerText
+                var Producto = {}
+                Producto.idProducto = Cod
+
+                $.ajax({
+                    type: "POST",
+                    url: "../Orden/AgregarProductoCarrito",
+                    data: JSON.stringify(Producto),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+
+                        Producto.idProducto = response.idProducto
+                        Producto.Nombre = response.nombre
+                        Producto.precio = response.precioVenta
+                        Producto.Cantidad = $("#CantiadP").val()
+
+
+                        var inicio = 0;
+
+
+                        if (inicio == 0) {
+                            var Producto_ = {};
+                            var i, n, p, c, d;
+                            i = Producto_.Id = Producto.idProducto;
+                            n = Producto_.Nombre = Producto.Nombre;
+                            p = Producto_.precio = Producto.precio;
+                            c = Producto_.Cantidad = Producto.Cantidad;
+                            d = Producto_.Descuento = 0;
+                            console.info(i, n, p, c, d);
+                            obtenerProducto(Producto_);
+                            inicio++
+                        }
+
+                        /*funcion a ejecutar*/
+                        /*cambio inicio para que solamente se ejecute una vez*/
+                        Bajar();
+
+                        $("#CantidadProducto").modal("hide");
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+
+
+
+
+            }
+            else {
+
+                alert("Seleccione ORDEN")
+                $("#CantidadProducto").modal("hide");
+            }
+
+        }
+        else {
+
+
+        }
+
+    }
+
+
+    //function cc() {
+
+    //    $("#tbdetalleProducto tbody tr").dblclick(function () {
+    //        var Producto = {};
+    //        var i, n, p, c;
+    //        i = Producto.Id = $(this).children().eq('0').text();
+    //        n = Producto.Nombre = $(this).children().eq('1').text();
+    //        p = Producto.precio = $(this).children().eq('2').text();
+    //        c = Producto.Cantidad = $(this).children().eq('3').text();
+    //        console.info(i, n, p, c);
+    //        //window.opener.obtenerProducto(Producto);
+    //        obtenerProducto(Producto);
+    //        window.close();
+
+
+
+    //    });
+
+    //}
+
+
+    function fn_agregarAut(Producto) {
+
+        if (Producto != null) {
+
+
+
+            cadena = "<tr>"
+            cadena = cadena + "<td>" + Producto.Id + "</td>";
+            cadena = cadena + "<td>" + Producto.Nombre + "</td>";
+            cadena = cadena + "<td>" + Producto.Cantidad + "</td>";
+            cadena = cadena + "<td>" + Producto.precio + "</td>";
+            //cadena = cadena + "<td>" + Producto.Descuento + "</td>";
+
+            var y = 0;
+            var x = 0;
+            var des = 0;
+            y = Producto.Cantidad
+            x = Producto.precio
+            des = Producto.Descuento
+            subtotal = (x * y) - des;
+            cadena = cadena + "<td>" + subtotal + "</td>"
+            cadena = cadena + "<td> No </td>"
+            cadena = cadena + "<td><a class ='elimina'><button class='btn btn-danger' type='button'><span class='fa fa-remove'></span></button></a></td>";
+
+            $("#detalle tbody").append(cadena);
+            sumar();
+            fn_dar_eliminar();
+            limpiarCliente();
+            limpiar();
+            $("#ListaProductoCodigo").val("");
+        }
+        else {
+            fn_dar_eliminar();
+            limpiarCliente();
+            limpiar();
+
+            $("#ListaProductoCodigo").val("");
+            alert("Codigo de producto no existe");
+        }
+
+    };
+
+
+    function ordenCliente() {
+
+    }
+
+    function obtenerProducto(Producto) {
+
+
+
+
+        fn_agregarAut(Producto);
+    };
+
+    $(document).ready(function () {
+
+
+
+        $("#prefactura").click(function () {
+
+            var idV = document.getElementById("idVentas").value;
+
+            if (idV) {
+
+                var w = 200;
+                var h = 200;
+                var left = Number((screen.width / 2) - (w / 2));
+                var tops = Number((screen.height / 2) - (h / 2));
+
+
+                window.open("Reportes/frmReporteFactura.aspx?IdVenta=" + document.getElementById("idVentas").value + "", "", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + tops + ', left=' + left);
+
+            }
+
+
+
+            clearInterval(watchclose);
+            watchclose = setInterval(function () {
+                //document.getElementById("txtnombre").value = "";
+                //document.getElementById("idVentas").value = "";
+                $("#txtnombre").val("");
+                $("#TotalaPagar").val("");
+                $("#idVentas").val("");
+            });
+
+
+
+        })
+
+
+        $("#Despachar").click(function () {
+
+            $("a[rel='pop-up']").click(function () {
+                var caracteristicas = "height=550,width=1000,scrollTo,resizable=1,scrollbars=1,location=0";
+                nueva = window.open(this.href, 'popup', caracteristicas);
+
+
+                return false;
+            });
+            //alertify.alert("Boton Iniciado");
+            //console.info('hola');
+            var i = 0;
+            var envio = "{";
+            $("#detalle tbody tr").each(function (index) {
+                if (i == 0) {
+                    envio += "ListadoDetalle:[{IdProducto:'" + $(this).find('td').eq(0).text() +
+                        "',Cantidad:'" + $(this).find('td').eq(2).text() +
+                        //"',Descuento:'" + $(this).find('td').eq(4).text() +
+                        "',Despachado:'" + $(this).find('td').eq(5).text() +
+                        "',SubTotal:'" + $(this).find('td').eq(4).text() + "'}";
+                } else {
+                    envio += ",{IdProducto:'" + $(this).find('td').eq(0).text() +
+                        "',Cantidad:'" + $(this).find('td').eq(2).text() +
+                        //"',Descuento:'" + $(this).find('td').eq(4).text() +
+                        "',Despachado:'" + $(this).find('td').eq(5).text() +
+                        "',SubTotal:'" + $(this).find('td').eq(4).text() + "'}"
+                }
+                i = 1;
+            });
+            envio += "]}";
+
+            var json = eval("(" + envio + ')');
+
+            //alertify.alert("INGRESE DATOS");
+            console.info(json);
+
+
+            $.ajax({
+                url: "Orden/ListaClientes",
+                data: JSON.stringify(json),
+                type: "POST",
+                async: false,//this makes the ajax-call blocking
+                contentType: 'application/json;charset=UTF-8',
+                dataType: 'json',
+                success: function (response) {
+                    alertify.alert(response);
+                    valid = response.valid;
+                },
+
+            });
+
+            $.ajax({
+                url: "Orden/GuardarOrden",
+                data: JSON.stringify(json),
+                type: "POST",
+                async: false,//this makes the ajax-call blocking
+                contentType: 'application/json;charset=UTF-8',
+                dataType: 'json',
+                success: function (response) {
+                    alertify.alert(response);
+                    valid = response.valid;
+                },
+
+            });
+
+
+
+
+            //$.ajax({
+            //    url: "Orden/ListaClientes",
+            //    data: JSON.stringify(json),
+            //    type: "POST",
+            //    async: false,//this makes the ajax-call blocking
+            //    contentType: 'application/json;charset=UTF-8',
+            //    dataType: 'json',
+            //    success: function (response) {
+            //        alertify.alert(response);
+            //        valid = response.valid;
+            //    },
+
+            //});
+        });
+
+    });
+
+
+
+
+    //   clearInterval(watchclose);
+    //watchclose = setInterval(function () {
+    //    $("#txtnombre").val(Cliente.DatosPersonales);
+    //    $("#idCliente").val(Cliente.Identificacion);
+    //    $("#codigoCliente").val(Cliente.Codigo);
+
+
+
+
+
+
+    /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+
+
+    /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+    //function closeNav() {
+    //  document.getElementById("mySidenav").style.width = "0";
+    //  document.getElementById("main").style.marginLeft = "0";
+    //}
+
+
+    function AsignarCodigo(id) {
+
+        $("#CantiadP").val(1)
+
+        document.getElementById("CodigoProductoCantidad").innerText = id
+
+
+
+    }
+
+    function NuevaOrden_() {
+        var cliente = {}
+
+        cliente.nombre = document.getElementById("Nombre").value
+        cliente.idMesa = document.getElementById("lblMesa").innerHTML
+
+        if (cliente.nombre) {
+
+            if (cliente.idMesa) {
+
+                $.post({
+                    url: "../Orden/NuevaOrden",
+                    data: JSON.stringify(cliente),
+                    type: "Post",
+                    async: false,//this makes the ajax-call blocking
+                    contentType: 'application/json;charset=UTF-8',
+                    //dataType: 'json',
+                    success: function (Response) {
+
+                //          $('#ListaCliente').on('hidden', function () {
+                //    $(this).removeData('div');
+                //});
+
+                $("#ListaCliente").html(Response)
+                             $("#NuevaOrden").modal("hide")
+
+                     
+
+
+                        //alert(response);
+                        //valid = response.valid;
+                    }
+
+                });
+
+            }
+            else {
+                 alert("Favor asignar Mesa")
+            }
+        }
+        else {
+            alert("Agregue nombre del cliente")
+        }
+    }
+
+    function BuscarMesas() {
+
+
+        $.ajax({
+            url: "../Orden/obtenerMesas",
+            type: "POST",
+            async: false,//this makes the ajax-call blocking
+            contentType: 'application/json;charset=UTF-8',
+
+            success: function (Response) {
+                //alert(Response)
+                $('#ListaMesas').on('hidden', function () {
+                    $(this).removeData('modal');
+                });
+
+                $("#ListaMesas").html(Response);
+        
+      
+                //detalle
+            }
+
+        });
+
+
+    }
+
+
+    function Diponible(Info)
+    {
+
+      document.getElementById("lblMesa").innerHTML = Info
+
+    }
+
+</script>
+
+
+@*<script src="~/Assets/bootstrap/js/bootstrap.min.js"></script>*@
+@*<script src="~/Assets/jquery/jquery.min.js"></script>*@
+
+
+@*informacion categorias*@
+
+
+
+
+
+@*detalles de compra*@
+<div id="NuevaOrden" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div id="NuevaOrden" class="modal-content">
+            <div class="modal-header bg-success">
+                <div>
+                    <h4 class="modal-title text-left">Nueva Orden</h4>
+                </div>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+
+                @*<div>
+                        <a href="~/Venta/ObtenerClientes" rel="pop-up">
+                            <input class="btn btn-warning btn-lg col-md-12" data-dismiss="modal" type="button" id="limpiarDetalle()" name="enlace_cliente" value="Cartera de Clientes" />
+                        </a>
+                    </div>*@
+
+                <div style="align-content:center">
+
+                    @*@using (Html.BeginForm("NuevaOrden", "Orden"))
+                        {*@
+                    <div>
+                        <h3>
+                            Cliente:  @*<input type="text" class="label label-warning col-md-4" style="border:hidden" readonly name="codigoCliente" id="codigoCliente" />*@
+                        </h3>
+
+                        <input type="text" required class="text text-warning col-md-12" style="background-color:white" placeholder="Nombre" name="Nombre" id="Nombre" />
+
+                        <script>
+                            $('#Nombre')
+                                .keyboard({
+                                    layout: 'custom',
+                                    customLayout: {
+                                        'normal': [
+                                            'q w e r t y u i o p {bksp}',
+                                            'a s d f g h j k l',
+                                            '{s} z x c v b n m @@ .',
+                                            '{space} _ - {accept}'
+                                        ]
+                                    },
+
+
+                                    restrictInput: false, // Prevent keys not in the displayed keyboard from being typed in
+                                    preventPaste: true,  // prevent ctrl-v and right click
+                                    autoAccept: true
+                                })
+
+                        </script>
+
+                        <div>
+                            <br />
+                            <input type="button" class="btn btn-dark" data-toggle="modal" onclick="BuscarMesas()" data-target="#Mesas" name="name" value="Mesa" />
+                            <label class="text text-black" style="font-size:x-large" id="lblMesa"></label>
+                        </div>
+
+                        @*<input type="text" hidden class="text text-warning col-md-12" placeholder="Apellido" name="Apellido" id="Apellido" />
+                            <input type="text" hidden class="text text-warning col-md-12" placeholder="Cedula" name="Cedula" id="Cedula" />
+                            <input type="text" hidden class="text text-warning col-md-12" placeholder="Referencia" name="Referencia" id="Referencia" />*@
+                        <br />
+                        <br />
+                        <div>
+                            <input type="button" onclick="NuevaOrden_()" class="btn btn-success" value="Guardar" />
+                            @*<button type="submit" class="btn btn-success" data-dismiss="modal">Guardar</button>*@
+                        </div>
+                    </div>
+                    @*}*@
+
+                </div>
+
+
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="~/js/jquery-ui-custom.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+
+
+
+
+
+<div id="CantidadProducto" class="modal fade" role="document">
+    <div class="modal-dialog" style="overflow:visible;">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+
+                <h4 class="modal-title" style="color:aliceblue">
+
+                    <label class="label-info" hidden id="CodigoProductoCantidad"></label>
+
+                </h4>
+            </div>
+            <div class="modal-body text-center" style="width:100%; height:100px;overflow:auto">
+
+                <div>
+                    <input type="text" required class="text text-warning col-md-12 text-center" id="CantiadP" style="background-color:white;font-size:x-large" name="name" value="1" />
+
+                    <script>
+                        $('#CantiadP')
+                            .keyboard({
+                                layout: 'custom',
+                                customLayout: {
+                                    'normal': [
+                                        '1 2 3 4',
+                                        '5 6 7 8',
+                                        '9 0',
+                                        '{bksp} {a} {c}'
+                                    ]
+                                },
+                                maxLength: 4,
+                                restrictInput: false, // Prevent keys not in the displayed keyboard from being typed in
+                                preventPaste: true,  // prevent ctrl-v and right click
+                                autoAccept: true
+                            })
+
+                    </script>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <input type="submit" onclick="cc()" class="btn btn-success left" style="float:left" value="LISTO" />
+                @*<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>*@
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<div id="Mesas" class="modal fade" role="document">
+    <div class="modal-dialog modal-lg" style="overflow:visible;">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <h4 class="modal-title" style="color:aliceblue">
+                    <label class="label-info">Mesas Diponibles</label>
+
+                </h4>
+            </div>
+
+            <div class="modal-body text-center" style="height:600px;overflow:auto">
+
+                <div id="ListaMesas">
+
+                    @Html.Partial("ListaMesas")
+                </div>
+
+
+
+
+                @*  *@
+
+            </div>
+        </div>
+    </div>
+
+</div>

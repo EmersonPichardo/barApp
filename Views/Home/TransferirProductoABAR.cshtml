@@ -1,0 +1,109 @@
+﻿@model barApp.InventarioBar
+
+@using (Ajax.BeginForm("TransferirProductoABar", FormMethod.Post, new AjaxOptions { LoadingElementId = "Progress", InsertionMode = InsertionMode.Replace, UpdateTargetId = "Contenedor", OnSuccess = "onSuccessTransferirProductoABar", OnFailure = "onFailureAjax" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.Label("Producto", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-12">
+                @Html.DropDownList("IdProducto", new SelectList((System.Collections.IEnumerable)ViewData["Producto"], "idProducto", "nombre"), "Seleccionar", htmlAttributes: new { @class = "form-control", id = "IdProducto", disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.IdProducto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Existencia", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.Editor("idCantidadInventarioE", new { htmlAttributes = new { @class = "form-control", disabled = "disabled", id = "idCantidadInventarioE" } })
+                @Html.ValidationMessageFor(model => model.cantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Cantidad", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.cantidad, new { htmlAttributes = new { @class = "form-control", @required = "required", id = "cantidad1" } })
+                @Html.ValidationMessageFor(model => model.cantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="btnTransferirABAR()" class="btn btn-primary">Guarda</button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function onSuccessTransferirProductoABar() {
+
+        $("#ModalTransferirProductoABAR").modal("hide")
+    }
+
+    function btnTransferirABAR() {
+
+        var IdProducto = $("#IdProducto").val()
+        var idCantidadInventarioE = document.getElementById("idCantidadInventarioE").value
+        var cantidad = document.getElementById("cantidad1").value
+
+        if (cantidad) {
+
+
+
+            if (parseInt(cantidad) <= parseInt(idCantidadInventarioE)) {
+
+                if (parseInt(cantidad) < 1) {
+
+                    alert("Cantidad no puede ser menor a 1")
+                    return
+                }
+
+                var InventarioBar = {}
+
+                InventarioBar.IdProducto = IdProducto
+                InventarioBar.cantidad = cantidad
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "../Home/TransferirProductoABar",
+                    data: JSON.stringify(InventarioBar),
+                    contentType: "application/json; charset=utf-8",
+         
+                    success: function (response) {
+                         
+                        $("#dataTable").html(response)
+                              $("#inlineRadio1").prop("checked", true)
+                             $("#ModalTransferirProductoABAR").modal("hide")
+                    }
+                });
+            }
+            else {
+                alert("Cantidad no puede ser mayor a la que hay en existencia")
+
+            }
+        }
+        else {
+            alert("Campo Cantidad esta vacio")
+        }
+
+    }
+</script>
+
+
+<script>
+    function onSuccessTransferirProductoABar() {
+        $("#inlineRadio1").prop("checked", true);
+        $("#ModalTransferirProductoABAR").modal("hide")
+    }
+</script>
+
