@@ -372,7 +372,7 @@
         }
 
         function NuevaOrden() {
-            document.getElementById("lblMesa").innerHTML=""
+            document.getElementById("lblMesa").innerHTML = ""
             $("#Nombre").val('');
             $("#Cedula").val('');
             $("#codigoCliente").val('');
@@ -423,7 +423,7 @@
             cadena = cadena + "<td><a class ='elimina'><button class='btn btn-danger' type='button'><span class='fa fa-remove'></span></button></a></td>";
             $("#detalle tbody").append(cadena);
             sumar();
-            fn_dar_eliminar();
+            //fn_dar_eliminar();
             limpiarCliente();
             limpiar();
 
@@ -455,14 +455,29 @@
             total = total - valor;
             $("#TotalaPagar").val(total);
         }
-        function fn_dar_eliminar() {
-            $("a.elimina").click(function () {
-                valor = $(this).parents("tr").find("td").eq(4).html();
+        function fn_dar_eliminar(id) {
+            let element = $(event.srcElement);
 
-                $(this).parents("tr").fadeOut("normal", function () {
-                    $(this).remove();
-                    restar();
-                });
+            valor = element.parents("tr").find("td").eq(4).html();
+
+            $.ajax({
+                type: "POST",
+                url: "../Orden/EliminarProductoCarrito",
+                data: JSON.stringify({ idDetalle: id }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function () {
+                    element.parents("tr").fadeOut("normal", function () {
+                        element.parents("tr").remove();
+                        restar();
+                    });
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
             });
         };
 

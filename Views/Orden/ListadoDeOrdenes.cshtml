@@ -9,7 +9,6 @@
             <th>Descripcion del Producto</th>
             <th>Cantidad</th>
             <th>Precio</th>
-            @*<th>Descuento</th>*@
             <th>Total</th>
             <th>Despachado</th>
             <th>Borrar</th>
@@ -19,34 +18,25 @@
 
         @if (Model != null)
         {
-
-
-           foreach (var item in Model)
+            foreach (var item in Model)
             {
-               
-          <tr class="borrar">
+                <tr class="@(item.despachada == true ? "" : "borrable")">
+                    <td id="@item.idDetalle">@item.idProducto</td>
+                    <td>@item.Producto.nombre.ToUpper()</td>
+                    <td>@item.cantidad</td>
+                    <td>@item.precioVenta</td>
+                    <td>@item.subTotal.ToString()</td>
 
-            <td>@item.idProducto</td>
-            <td>@item.Producto.nombre.ToUpper()</td>
-            <td>@item.cantidad</td>
-            <td>@item.precioVenta</td>
-            @*<td>0</td>*@
-            <td>@item.subTotal.ToString()</td>
-
-            @{ 
-
-             if (item.despachada == true)
-                {
-                    <td>Si</td>
-                }
-                else
-                {
-                    <td>No</td>
-                }
-
-            }
-
-        </tr>
+                    @if (item.despachada == true)
+                    {
+                        <td>Si</td>
+                    }
+                    else
+                    {
+                        <td>No</td>
+                        <td><button class='btn btn-danger' type='button' onclick="fn_dar_eliminar(@item.idDetalle)"><span class='fa fa-remove'></span></button></td>
+                    }
+                </tr>
             }
         }
 
