@@ -1,4 +1,5 @@
-﻿using System;
+﻿using barApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
@@ -202,12 +203,12 @@ namespace barApp.Controllers
         }
 
         [HttpPost]
-        public int Despachar(int[] ids)
+        public int Despachar(string waiter, int[] ids)
         {
+            List<string[]> data = new List<string[]>();
+
             using (barbdEntities context = new barbdEntities())
             {
-                List<string[]> data = new List<string[]>();
-
                 for (int index = 0; index < (ids?.Length ?? 0); index++)
                 {
                     DetalleVenta detalleVenta = context.DetalleVenta.Find(ids[index]);
@@ -218,63 +219,22 @@ namespace barApp.Controllers
                 }
 
                 context.SaveChanges();
-
-                //Imprimir
-                PrintDocument document = new PrintDocument();
-
-                document.PrintPage += delegate (object sender, PrintPageEventArgs _event)
-                {
-                    //Configuration
-                    Font titleFont = new Font("Calibri", 22, FontStyle.Bold);
-                    Font bodyTitleFont = new Font("Calibri", 14, FontStyle.Bold);
-                    Font bodyFont = new Font("Calibri", 12);
-                    Brush brush = new SolidBrush(Color.Black);
-                    float width = document.DefaultPageSettings.PrintableArea.Width;
-                    float height = document.DefaultPageSettings.PrintableArea.Height;
-                    int padding = 30;
-                    int gridColumns = 2;
-                    float xGridSize = (width - (padding * 2)) / gridColumns;
-                    int ySeparation = 10;
-                    float yCurrent = padding;
-
-                    //Header
-                    string header = "Despachar";
-                    _event.Graphics.DrawString(header, titleFont, brush, width / 2, yCurrent, new StringFormat() { Alignment = StringAlignment.Center });
-                    yCurrent += _event.Graphics.MeasureString(header, titleFont).Height + (ySeparation * 4);
-
-                    //Body
-                    _event.Graphics.DrawLine(new Pen(brush), padding / 2, yCurrent, width - (padding / 2), yCurrent);
-
-                    string[] tableColumns = new string[2] { "Descripción", "Cantidad" };
-                    for (int index = 0; index < tableColumns.Length; index++)
-                    {
-                        _event.Graphics.DrawString(tableColumns[index].ToUpper(), bodyTitleFont, brush, (padding + (xGridSize * index)), yCurrent);
-                    }
-
-                    yCurrent += _event.Graphics.MeasureString(tableColumns[0], bodyFont).Height;
-                    _event.Graphics.DrawLine(new Pen(brush), padding / 2, yCurrent, width - (padding / 2), yCurrent);
-                    yCurrent += ySeparation;
-
-                    for (int row = 0; row < data.Count; row++)
-                    {
-                        for (int valueIndex = 0; valueIndex < data[row].Length; valueIndex++)
-                        {
-                            _event.Graphics.DrawString(data[row][valueIndex], bodyFont, brush, (padding + (xGridSize * valueIndex)), yCurrent);
-                        }
-
-                        yCurrent += row < data.Count - 1 ? _event.Graphics.MeasureString(tableColumns[0], bodyFont).Height + ySeparation : 0;
-                    }
-
-                    yCurrent += _event.Graphics.MeasureString(tableColumns[0], bodyFont).Height + (ySeparation * 4);
-
-                    //Footer
-                    _event.Graphics.DrawString(DateTime.Now.ToString("dd MMM yyyy hh:mm:ss tt"), bodyFont, brush, width / 2, yCurrent, new StringFormat() { Alignment = StringAlignment.Center });
-                };
-
-                document.Print();
-
-                return 1;
             }
+
+            Printer printer = new Printer();
+
+            printer.AddTitle("Despachar");
+
+            Dictionary<string, string> list = new Dictionary<string, string>();
+            list.Add("Mesero/a", waiter);
+            list.Add("Fecha/hora", DateTime.Now.ToString("dd MMM yyyy hh:mm:ss tt"));
+            printer.AddDescriptionList(list);
+
+            printer.AddTable(new string[2] { "Descripción", "Cantidad" }, data.ToArray());
+
+            printer.Print();
+
+            return 1;
         }
     }
 }

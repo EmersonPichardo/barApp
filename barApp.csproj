@@ -183,6 +183,7 @@
     </Compile>
     <Compile Include="Models\InfoMensaje.cs" />
     <Compile Include="Models\Inventario.cs" />
+    <Compile Include="Models\Printer.cs" />
     <Compile Include="ModoPago.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

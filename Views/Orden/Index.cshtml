@@ -439,9 +439,12 @@
 </div>
 <script src="~/Scripts/jquery.keyboard.js"></script>
 <script type="text/javascript">
-
-
-
+    $()
+    {
+        $('.modal').on('show.bs.modal', function (event) {
+            alert()
+        })
+    }
     // function prefactura() {
 
     //      $("#txtnombre").val("");
@@ -740,7 +743,7 @@
             $.ajax({
                 type: "POST",
                 url: "../Orden/Despachar",
-                data: JSON.stringify([...ids]),
+                data: JSON.stringify({ waiter: $('span.text-dark')[0].innerText.replace('Vendedor: ', ''), ids: [...ids] }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -1060,3 +1063,17 @@
     </div>
 
 </div>
+
+<script>
+    setTimeout(function () {
+        $(".modal").detach().appendTo("#modal-container");
+
+        $('.modal').on('show.bs.modal', function (event) {
+            $('#body-container').addClass('blur');
+        });
+
+        $('.modal').on('hide.bs.modal', function (event) {
+            $('#body-container').removeClass('blur');
+        });
+    }, 0)
+</script>

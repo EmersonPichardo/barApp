@@ -9786,6 +9786,11 @@ html {
 
 body {
   height: 100%;
+  transition: filter ease-out 400ms;
+}
+
+body.filter {
+  filter: blur(10px);
 }
 
 a:focus {
