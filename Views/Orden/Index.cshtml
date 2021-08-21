@@ -1,55 +1,33 @@
-﻿
-@{
+﻿@{
     Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutMyOrden.cshtml";
     ViewBag.Title = "Sistema Ventas Orden";
-
 }
+
 <link href="~/css/jquery-ui.min.css" rel="stylesheet" />
 <script src="~/vendor/jquery/jquery.min.js"></script>
-@*<script src="~/Js/alertify.min.js"></script>
-    <link href="~/Css/alertify.core.css" rel="stylesheet" />
-    <link href="~/Css/alertify.default.css" rel="stylesheet" />*@
 
 <link rel="stylesheet" href="~/css/keyboard.css" />
 <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+
 <div id="DivUserList1">
-
-
     <div id="main" class="menu-box">
-
-
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="heading-title text-center">
                         <br />
-                        @*<h2>Menu</h2>*@
-                        @*<p></p>*@
                     </div>
-                    @*<span onclick="openNav()">Mostrar Clientes</span> <br />*@
-
-                    <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
-                    @*<div id="main">
-                            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><<<</a>
-                        </div>*@
                     <span class="fa fa-shopping-cart">Menu</span>  <hr />
                 </div>
             </div>
 
-
             <div class="row inner-menu-box">
-
-
-
-
                 <div class="col-3">
 
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-Restaurante" role="tab" aria-controls="v-pills-Restaurante" aria-selected="true">Restaurante</a>
                         <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-Bar" role="tab" aria-controls="v-pills-Bar" aria-selected="false">Bar</a>
-                        @*<a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-Especiales" role="tab" aria-controls="v-pills-Especiales" aria-selected="false">Especiales</</a>*@
-                        @*<a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-Especiales" role="tab" aria-controls="v-pills-Especiales" aria-selected="false">Especiales</a>*@
                     </div>
                 </div>
 
@@ -69,7 +47,6 @@
                                             <div class="img-fluid gallery-single fix">
 
                                                 <div>
-                                                    @*<img src="~/styleOrden/images/img-01.jpg" class="img-fluid" alt="Image">*@
                                                     <div>
                                                         @{
                                                             string categoria = "Categoria" + person.idCategoria;
@@ -82,10 +59,7 @@
 
                                         //producto
 
-
-
                                         string categoria1 = "Categoria" + person.idCategoria;
-
 
                                         <div id=@categoria1 class="modal fade" role="document">
                                             <div class="modal-dialog  modal-lg" style="overflow:visible">
@@ -110,52 +84,9 @@
                                                                     <br />
 
                                                                     <br />
-
-                                                                    @*<td onclick="cc()" data-dismiss="modal">@item.idProducto</td>
-                                                                        <td onclick="cc()" data-dismiss="modal">@item.nombre</td>
-                                                                        <td onclick="cc()" data-dismiss="modal">@item.precioVenta</td>
-                                                                        <td><input style="width:70px; height:50px; font-size:40px" type="number" name="name" value="1" /></td>*@
-
-
-
                                                                 }
                                                             }
                                                         </div>
-
-                                                        @*<table id="tbdetalleProducto" class="table table-striped" style="overflow-y:visible">
-
-
-                                                                <thead style="font-size:16px;">
-                                                                    <tr class="bg-danger">
-                                                                        <th>Id</th>
-                                                                        <th>Nombre</th>
-                                                                        <th>Precio</th>
-                                                                        <th>Cantidad</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @foreach (var item in ViewBag.Producto)
-                                                                    {
-                                                                        if (Convert.ToInt32(item.idCategoria) == Convert.ToInt32(person.idCategoria))
-                                                                        {
-
-                                                                            <tr>
-                                                                                <td onclick="cc()" data-dismiss="modal">@item.idProducto</td>
-                                                                                <td onclick="cc()" data-dismiss="modal">@item.nombre</td>
-                                                                                <td onclick="cc()" data-dismiss="modal">@item.precioVenta</td>
-                                                                                <td><input style="width:70px; height:50px; font-size:40px" type="number" name="name" value="1" /></td>
-
-                                                                            </tr>
-
-                                                                        }
-                                                                    }
-                                                                </tbody>
-
-
-
-                                                            </table>*@
-
-
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -190,7 +121,6 @@
                                             <div class="img-fluid gallery-single fix">
 
                                                 <div>
-                                                    @*<img src="~/styleOrden/images/img-01.jpg" class="img-fluid" alt="Image">*@
                                                     <div>
                                                         @{
                                                             string categoria = "Categoria" + person.idCategoria;
@@ -203,9 +133,7 @@
 
                                         //producto
 
-
                                         string categoria1 = "Categoria" + person.idCategoria;
-
 
                                         <div id=@categoria1 class="modal fade" role="document">
                                             <div class="modal-dialog modal-lg" style="overflow:visible">
@@ -224,197 +152,46 @@
 
                                                                 if (Convert.ToInt32(item.idCategoria) == Convert.ToInt32(person.idCategoria))
                                                                 {
-
-
                                                                     <button id="@item.idProducto" data-dismiss="modal" data-toggle="modal" data-target="#CantidadProducto" value="@item.idProducto" onclick="AsignarCodigo('@item.idProducto')" class="btn btn-dark">@item.nombre <span class="fa fa-shopping-cart"></span> </button>
                                                                     <br />
-
                                                                     <br />
-
-                                                                    @*<td onclick="cc()" data-dismiss="modal">@item.idProducto</td>
-                                                                        <td onclick="cc()" data-dismiss="modal">@item.nombre</td>
-                                                                        <td onclick="cc()" data-dismiss="modal">@item.precioVenta</td>
-                                                                        <td><input style="width:70px; height:50px; font-size:40px" type="number" name="name" value="1" /></td>*@
-
-
-
                                                                 }
                                                             }
                                                         </div>
-
-
-                                                        @*<table id="tbdetalleProducto" class="table table-light" style="overflow-y:visible">
-                                                                <thead style="font-size:16px;">
-
-                                                                    <tr class="bg-danger">
-                                                                        <th>Id</th>
-                                                                        <th>Nombre</th>
-                                                                        <th>Precio</th>
-                                                                        <th>Cantidad</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @foreach (var item in ViewBag.Producto)
-                                                                    {
-                                                                        if (Convert.ToInt32(item.idCategoria) == Convert.ToInt32(person.idCategoria))
-                                                                        {
-                                                                            <tr>
-                                                                                <td onclick="cc()" data-dismiss="modal">@item.idProducto</td>
-                                                                                <td onclick="cc()" data-dismiss="modal">@item.nombre</td>
-                                                                                <td onclick="cc()" data-dismiss="modal">@item.precioVenta</td>
-                                                                                <td><input style="width:70px; height:50px; font-size:40px" type="number" name="name" value="1" /></td>
-
-                                                                            </tr>
-                                                                        }
-                                                                    }
-                                                                </tbody>
-
-                                                                <tbody></tbody>
-
-                                                            </table>*@
-
-
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
-
-
                                     }
                                 }
-
                             </div>
-
                         </div>
-
-
-                        @*Especiales*@
-
-                        @*<div class="tab-pane fade" id="v-pills-Especiales" role="tabpanel" aria-labelledby="v-pills-Especiales-tab">
-
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-6 special-grid drinks">
-                                        <div class="img-fluid gallery-single fix">
-
-                                            <div>
-                                                <img src="~/styleOrden/images/img-01.jpg" class="img-fluid" alt="Image">
-                                                <div>
-
-                                                    <button type="submit" data-toggle="modal" data-target="#Espciales" class="btn btn-dark col-lg-12 col-md-8">Especiales</button>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                                producto
-
-                                <div id="Espciales" class="modal fade" role="document">
-                                    <div class="modal-dialog">
-
-                                         Modal content
-                                        <div class="modal-content" style="width:700px; height:500px; overflow:visible">
-                                            <div class="modal-header bg-secondary">
-
-                                                <h4 class="modal-title" style="color:aliceblue">Especiales</h4>
-                                            </div>
-                                            <div class="modal-body" style="width:700px; height:500px;overflow:auto">
-
-
-                                                <table id="tbdetalleProducto" class="table table-light" style="overflow-y:visible">
-                                                    <thead style="font-size:16px;">
-
-                                                        <tr class="bg-danger">
-                                                            <th>Id</th>
-                                                            <th>Nombre</th>
-                                                            <th>Precio</th>
-                                                            <th>Cantidad</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach (var item in ViewBag.Especial)
-                                                        {
-                                                            <tr>
-                                                                <td onclick="cc()" data-dismiss="modal">@item.IdProducto</td>
-                                                                <td onclick="cc()" data-dismiss="modal">@item.Descripcion</td>
-                                                                <td onclick="cc()" data-dismiss="modal">@item.Precio</td>
-                                                                <td><input style="width:70px; height:50px; font-size:40px" type="number" name="name" value="1" /></td>
-
-                                                            </tr>
-
-                                                        }
-                                                    </tbody>
-
-                                                    <tbody></tbody>
-
-                                                </table>
-
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>*@
-
                     </div>
                 </div>
 
-
             </div>
             <hr />
-
-
-
 
             <span class="text align-text-top text-dark mx-md-3 fa fa-user" style="border:none"> Cliente:</span> <input style="font-size:20px; font-weight:900; width:35%" type="text" ng-model="Nombre" name="txtnombre" id="txtnombre" readonly required />
 
             <span class="text align-text-top text-dark mx-md-3 fa" style="border:none">No. Orden:</span><input style="font-size:20px; font-weight:900; width:10%" type="text" id="idVentas" ng-model="idVentas" readonly required />
 
             <div style="float:right">
-                @*@using (Ajax.BeginForm("Index", "Orden", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivUserList", LoadingElementId = "progress", InsertionMode = InsertionMode.Replace }))
-                    {*@
-
-                @*<input type="button" class="btn btn-light" name="name" value="Imprimir" />*@
-
                 <input type="submit" class="btn btn-warning" id="Despachar" name="btnOrden" value="Despachar" />
-                @*}*@
             </div>
 
-            <div style="float:right" ng-app="">
-                @using (Ajax.BeginForm("PreFactura", "Orden", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivUserList1", LoadingElementId = "progress", InsertionMode = InsertionMode.Replace }))
-                {
-
-
-                    <input type="submit" class="btn btn-info" id="prefactura" name="btnOrden" ng-click="idVentas='fff'" value="Pre-Factura" />
-
-
-
-                }
-
+            <div style="float:right">
+                <input type="submit" class="btn btn-info" id="Prefacturar" name="btnOrden" value="Prefacturar" />
             </div>
-
 
             <div id="ListaCliente">
                 @Html.Partial("ListadoClientes", ViewData["ListadoClienteOrdenar"])
-
             </div>
 
             <div id="DivUserList">
-
-
-
                 @Html.Partial("ListadoDeOrdenes")
 
                 <table class="table">
@@ -422,55 +199,20 @@
 
                         <td style="float:right;font-size:20px;">Total a Pagar</td>
                         <th></th>
-                        <td><input style="font-size:20px; font-weight:700;" class="form-control" type="text" name="TotalaPagar" id="TotalaPagar" required readonly /></td>
+                        <td>
+                            <input style="font-size:20px; font-weight:700;" class="form-control" type="text" name="TotalaPagarText" id="TotalaPagarText" required readonly />
+                            <input id="TotalaPagar" type="hidden" />
+                        </td>
                     </tr>
                 </table>
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
 </div>
+
 <script src="~/Scripts/jquery.keyboard.js"></script>
 <script type="text/javascript">
-    $()
-    {
-        $('.modal').on('show.bs.modal', function (event) {
-            alert()
-        })
-    }
-    // function prefactura() {
-
-    //      $("#txtnombre").val("");
-    //        $("#TotalaPagar").val("");
-    //        $("#idVentas").val("");
-    //    $.ajax({
-    //            url: "Orden/PreFactura",
-    //            //data: JSON.stringify(json),
-    //            type: "GET",
-    //            async: false,//this makes the ajax-call blocking
-    //            contentType: 'application/json;charset=UTF-8',
-    //            dataType: 'json',
-    //            success: function (response) {
-    //                alertify.alert(response);
-    //                valid = response.valid;
-    //            },
-
-    //    });
-
-
-
-    //}
-
     function Bajar() {
-
-
         $(window).on('scroll', function () {
             if ($(this).scrollTop() < 10) {
                 $('#back-to-up').fadeIn();
@@ -481,19 +223,15 @@
 
         $("html, body").animate({ scrollTop: 20000 }, 600);
         return false;
-
-
     }
 
-
     function mostrarCliente(nombre, TotalPagar, idVentas) {
-
         TotalPagar = 0;
 
         $.ajax({
             url: "../Orden/Total?Id=" + idVentas,
             type: "GET",
-            async: false,//this makes the ajax-call blocking
+            async: false,
             contentType: 'application/json;charset=UTF-8',
             dataType: 'json',
             success: function (Total) {
@@ -502,7 +240,6 @@
 
         });
 
-
         Bajar();
         subtotal = 0;
         total = TotalPagar;
@@ -510,17 +247,15 @@
 
         clearInterval(watchclose);
         watchclose = setInterval(function () {
-            //document.getElementById("txtnombre").value = "";
-            //document.getElementById("idVentas").value = "";
             $("#txtnombre").val(nombre);
-            $("#TotalaPagar").val(total);
+            $("#TotalaPagar").val(total).trigger('change');
             $("#idVentas").val(idVentas);
         });
 
         $.ajax({
             url: "../Orden/IndexDetalles?Id=" + idVentas,
             type: "POST",
-            async: false,//this makes the ajax-call blocking
+            async: false,
             contentType: 'application/json;charset=UTF-8',
 
             success: function (Response) {
@@ -529,22 +264,14 @@
             }
 
         });
-
     }
+
     function cc() {
-
-
         var nombreCliente = document.getElementById("txtnombre").value;
         var CantidadPp = document.getElementById("CantiadP").value;
 
         if (CantidadPp) {
-
-
-
-
             if (nombreCliente) {
-
-
                 var Cod = document.getElementById("CodigoProductoCantidad").innerText
                 var detalleVenta = {}
                 detalleVenta.idVenta = $("#idVentas").val()
@@ -564,9 +291,7 @@
                         Producto.precio = response.producto.precioVenta
                         Producto.Cantidad = $("#CantiadP").val()
 
-
                         var inicio = 0;
-
 
                         if (inicio == 0) {
                             var Producto_ = {};
@@ -577,13 +302,10 @@
                             c = Producto_.Cantidad = Producto.Cantidad;
                             d = Producto_.Descuento = 0;
                             e = Producto_.idDetalle = response.idDetalle;
-                            console.info(i, n, p, c, d);
                             obtenerProducto(Producto_);
                             inicio++
                         }
 
-                        /*funcion a ejecutar*/
-                        /*cambio inicio para que solamente se ejecute una vez*/
                         Bajar();
 
                         $("#CantidadProducto").modal("hide");
@@ -595,59 +317,21 @@
                         alert(response.responseText);
                     }
                 });
-
-
-
-
             }
             else {
-
                 alert("Seleccione una orden")
                 $("#CantidadProducto").modal("hide");
             }
-
         }
-        else {
-
-
-        }
-
     }
 
-
-    //function cc() {
-
-    //    $("#tbdetalleProducto tbody tr").dblclick(function () {
-    //        var Producto = {};
-    //        var i, n, p, c;
-    //        i = Producto.Id = $(this).children().eq('0').text();
-    //        n = Producto.Nombre = $(this).children().eq('1').text();
-    //        p = Producto.precio = $(this).children().eq('2').text();
-    //        c = Producto.Cantidad = $(this).children().eq('3').text();
-    //        console.info(i, n, p, c);
-    //        //window.opener.obtenerProducto(Producto);
-    //        obtenerProducto(Producto);
-    //        window.close();
-
-
-
-    //    });
-
-    //}
-
-
     function fn_agregarAut(Producto) {
-
         if (Producto != null) {
-
-
-
             cadena = "<tr class='borrable'>"
             cadena = cadena + '<td id="' + Producto.idDetalle + '">' + Producto.Id + "</td>";
             cadena = cadena + "<td>" + Producto.Nombre + "</td>";
             cadena = cadena + "<td>" + Producto.Cantidad + "</td>";
-            cadena = cadena + "<td>" + Producto.precio + "</td>";
-            //cadena = cadena + "<td>" + Producto.Descuento + "</td>";
+            cadena = cadena + "<td>" + formatter.format(Producto.precio) + "</td>";
 
             var y = 0;
             var x = 0;
@@ -656,144 +340,119 @@
             x = Producto.precio
             des = Producto.Descuento
             subtotal = (x * y) - des;
-            cadena = cadena + "<td>" + subtotal + "</td>"
+            cadena = cadena + "<td name=" + subtotal + ">" + formatter.format(subtotal) + "</td>"
             cadena = cadena + "<td> No </td>"
             cadena = cadena + '<td><button class="btn btn-danger" type="button" onclick="fn_dar_eliminar(' + Producto.idDetalle + ')"><span class="fa fa-remove"></span></button></td>';
 
             $("#detalle tbody").append(cadena);
             sumar();
-            //fn_dar_eliminar();
             limpiarCliente();
             limpiar();
             $("#ListaProductoCodigo").val("");
         }
         else {
-            //fn_dar_eliminar();
             limpiarCliente();
             limpiar();
 
             $("#ListaProductoCodigo").val("");
             alert("Codigo de producto no existe");
         }
-
     };
 
-
-    function ordenCliente() {
-
-    }
-
     function obtenerProducto(Producto) {
-
-
-
-
         fn_agregarAut(Producto);
     };
 
-    $(document).ready(function () {
+    $("#Prefacturar").click(function () {
+        let idVenta = $("#idVentas").val();
+        let ids = $('#detalle tr').map((_, b) => parseInt(b?.cells[0]?.id));
+        let idsBorrables = $('#detalle tr.borrable').map((_, b) => parseInt(b?.cells[0]?.id));
 
+        if (!idVenta) {
+            alert('Seleccione una orden');
+            return;
+        }
 
+        if (!ids.length) {
+            alert('No hay productos por facturar');
+            return;
+        }
 
-        $("#prefactura").click(function () {
+        if (idsBorrables.length) {
+            alert('Aún hay productos por despachar');
+            return;
+        }
 
-            var idV = document.getElementById("idVentas").value;
+        let data = {
+            id: idVenta
+        }
 
-            if (idV) {
-
-                var w = 200;
-                var h = 200;
-                var left = Number((screen.width / 2) - (w / 2));
-                var tops = Number((screen.height / 2) - (h / 2));
-
-
-                window.open("Reportes/frmReporteFactura.aspx?IdVenta=" + document.getElementById("idVentas").value + "", "", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + tops + ', left=' + left);
-
+        $.ajax({
+            type: "POST",
+            url: "../Orden/Prefacturar",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                alert('Prefactura realizada con éxitos');
+                location.reload();
+            },
+            error: function (request) {
+                alert(request.responseText);
             }
-
-
-
-            clearInterval(watchclose);
-            watchclose = setInterval(function () {
-                //document.getElementById("txtnombre").value = "";
-                //document.getElementById("idVentas").value = "";
-                $("#txtnombre").val("");
-                $("#TotalaPagar").val("");
-                $("#idVentas").val("");
-            });
-
-
-
-        })
-
-
-        $("#Despachar").click(function () {
-            let ids = $('#detalle tr.borrable').map((_, b) => parseInt(b.cells[0].id));
-
-            if (!$("#idVentas").val()) {
-                alert('Seleccione una orden');
-                return;
-            }
-
-            if (!ids.length) {
-                alert('No hay productos para despachar');
-                return;
-            }
-
-            $.ajax({
-                type: "POST",
-                url: "../Orden/Despachar",
-                data: JSON.stringify({ waiter: $('span.text-dark')[0].innerText.replace('Vendedor: ', ''), ids: [...ids] }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    $('#detalle tr.borrable').each((_, tr) => {
-                        tr.removeAttribute('class');
-                        $(tr.cells[tr.cells.length - 2]).text('Si');
-                        tr.cells[tr.cells.length - 1].remove();
-                    });
-
-                    alert('Productos despachados con éxitos');
-                }
-            });
         });
     });
 
+    $("#Despachar").click(function () {
+        let ids = $('#detalle tr.borrable').map((_, b) => parseInt(b.cells[0].id));
 
+        if (!$("#idVentas").val()) {
+            alert('Seleccione una orden');
+            return;
+        }
 
+        if (!ids.length) {
+            alert('No hay productos para despachar');
+            return;
+        }
 
-    //   clearInterval(watchclose);
-    //watchclose = setInterval(function () {
-    //    $("#txtnombre").val(Cliente.DatosPersonales);
-    //    $("#idCliente").val(Cliente.Identificacion);
-    //    $("#codigoCliente").val(Cliente.Codigo);
+        let data = {
+            waiter: $('span.text-dark')[0].innerText.replace('Vendedor: ', ''),
+            ids: [...ids]
+        }
 
+        $.ajax({
+            type: "POST",
+            url: "../Orden/Despachar",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#detalle tr.borrable').each((_, tr) => {
+                    tr.removeAttribute('class');
+                    $(tr.cells[tr.cells.length - 2]).text('Si');
+                    tr.cells[tr.cells.length - 1].remove();
+                });
 
-
-
-
-
-    /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+                alert('Productos despachados con éxitos');
+            },
+            error: function (request) {
+                alert(request.responseText);
+            }
+        });
+    });
 
     document.getElementById("mySidenav").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
 
-
-    /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
-    //function closeNav() {
-    //  document.getElementById("mySidenav").style.width = "0";
-    //  document.getElementById("main").style.marginLeft = "0";
-    //}
-
-
     function AsignarCodigo(id) {
+        $("#CantiadP").val('');
 
-        $("#CantiadP").val(1)
+        setTimeout(function () {
+            $("#CantiadP").click();
+        }, 425);
 
         document.getElementById("CodigoProductoCantidad").innerText = id
-
-
-
     }
 
     function NuevaOrden_() {
@@ -803,34 +462,18 @@
         cliente.idMesa = document.getElementById("lblMesa").innerHTML
 
         if (cliente.nombre) {
-
             if (cliente.idMesa) {
-
                 $.post({
                     url: "../Orden/NuevaOrden",
                     data: JSON.stringify(cliente),
                     type: "Post",
-                    async: false,//this makes the ajax-call blocking
+                    async: false,
                     contentType: 'application/json;charset=UTF-8',
-                    //dataType: 'json',
                     success: function (Response) {
-
-                        //          $('#ListaCliente').on('hidden', function () {
-                        //    $(this).removeData('div');
-                        //});
-
                         $("#ListaCliente").html(Response)
                         $("#NuevaOrden").modal("hide")
-
-
-
-
-                        //alert(response);
-                        //valid = response.valid;
                     }
-
                 });
-
             }
             else {
                 alert("Favor asignar Mesa")
@@ -842,50 +485,26 @@
     }
 
     function BuscarMesas() {
-
-
         $.ajax({
             url: "../Orden/obtenerMesas",
             type: "POST",
-            async: false,//this makes the ajax-call blocking
+            async: false,
             contentType: 'application/json;charset=UTF-8',
 
             success: function (Response) {
-                //alert(Response)
                 $('#ListaMesas').on('hidden', function () {
                     $(this).removeData('modal');
                 });
 
                 $("#ListaMesas").html(Response);
-
-
-                //detalle
             }
-
         });
-
-
     }
-
 
     function Diponible(Info) {
-
         document.getElementById("lblMesa").innerHTML = Info
-
     }
-
 </script>
-
-
-@*<script src="~/Assets/bootstrap/js/bootstrap.min.js"></script>*@
-@*<script src="~/Assets/jquery/jquery.min.js"></script>*@
-
-
-@*informacion categorias*@
-
-
-
-
 
 @*detalles de compra*@
 <div id="NuevaOrden" class="modal fade" role="dialog">
@@ -974,12 +593,6 @@
 <script src="~/js/jquery-ui-custom.min.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
-
-
-
-
-
-
 <div id="CantidadProducto" class="modal fade" role="document">
     <div class="modal-dialog" style="overflow:visible;">
 
@@ -999,23 +612,24 @@
                     <input type="text" required class="text text-warning col-md-12 text-center" id="CantiadP" style="background-color:white;font-size:x-large" name="name" value="1" />
 
                     <script>
-                        $('#CantiadP')
-                            .keyboard({
-                                layout: 'custom',
-                                customLayout: {
-                                    'normal': [
-                                        '1 2 3 4',
-                                        '5 6 7 8',
-                                        '9 0',
-                                        '{bksp} {a} {c}'
-                                    ]
-                                },
-                                maxLength: 4,
-                                restrictInput: false, // Prevent keys not in the displayed keyboard from being typed in
-                                preventPaste: true,  // prevent ctrl-v and right click
-                                autoAccept: true
-                            })
-
+                        $('#CantiadP').keyboard({
+                            layout: 'custom',
+                            customLayout: {
+                                'normal': [
+                                    '1 2 3',
+                                    '4 5 6',
+                                    '7 8 9',
+                                    ' 0 ',
+                                    '',
+                                    '{bksp} {c} {a}'
+                                ]
+                            },
+                            maxLength: 4,
+                            restrictInput: false, // Prevent keys not in the displayed keyboard from being typed in
+                            preventPaste: true,  // prevent ctrl-v and right click
+                            autoAccept: true,
+                            openOn: 'click'
+                        })
                     </script>
                 </div>
 
@@ -1029,10 +643,6 @@
 
     </div>
 </div>
-
-
-
-
 
 <div id="Mesas" class="modal fade" role="document">
     <div class="modal-dialog modal-lg" style="overflow:visible;">
@@ -1066,6 +676,10 @@
 
 <script>
     setTimeout(function () {
+        $('#TotalaPagar').off("change").on("change", function (event) {
+            $('#TotalaPagarText').val(formatter.format($('#TotalaPagar').val()))
+        });
+
         $(".modal").detach().appendTo("#modal-container");
 
         $('.modal').on('show.bs.modal', function (event) {

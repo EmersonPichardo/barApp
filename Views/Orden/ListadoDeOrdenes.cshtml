@@ -23,9 +23,9 @@
                 <tr class="@(item.despachada == true ? "" : "borrable")">
                     <td id="@item.idDetalle">@item.idProducto</td>
                     <td>@item.Producto.nombre.ToUpper()</td>
-                    <td>@item.cantidad</td>
-                    <td>@item.precioVenta</td>
-                    <td>@item.subTotal.ToString()</td>
+                    <td>@item.cantidad.ToString("#,0")</td>
+                    <td>@item.precioVenta.GetValueOrDefault(0).ToString("$#,0.00")</td>
+                    <td>@item.subTotal.ToString("$#,0.00")</td>
 
                     @if (item.despachada == true)
                     {

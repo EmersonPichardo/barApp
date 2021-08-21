@@ -1,11 +1,7 @@
 ﻿using barApp.Models;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Printing;
-using System.Web;
 using System.Web.Mvc;
 
 namespace barApp.Controllers
@@ -15,8 +11,6 @@ namespace barApp.Controllers
         // GET: Orden
         public ActionResult Index()
         {
-
-
             using (var entity = new barbdEntities())
             {
                 Session["idVenta"] = null;
@@ -26,9 +20,7 @@ namespace barApp.Controllers
                 ViewBag.Categoria = entity.Categoria.ToList();
                 ViewBag.Producto = entity.Producto.Where(x => x.activo == true).ToList();
                 ViewData["Mesas"] = entity.Mesa.ToList();
-                //ViewBag.Especial = orden_.ListaEspeciales();
             }
-
 
             return View();
         }
@@ -36,27 +28,14 @@ namespace barApp.Controllers
         [HttpPost]
         public ActionResult IndexDetalles(string Id)
         {
-            // int idrol = Convert.ToInt32(System.Web.HttpContext.Current.Session["idVendedor"]);
             using (var entity = new barbdEntities())
             {
-                //int idrol = Convert.ToInt32(Session["IdUsuario"]);
-                //ViewData["ListadoClienteOrdenar"] = orden_.ListaClienteOrdenar(idrol);
-                //double Total = orden_.totalVenta(Convert.ToInt32(Session["idVenta"]));
-                //ViewBag.TotalPagar = Total;
                 int idVenta = Convert.ToInt32(Id);
-                var ListaDetalleVenta = entity.DetalleVenta.Include("Venta").Include("Producto").Where(x => x.idVenta == idVenta).ToList();   //orden_.ListaOrdenar(Convert.ToInt32(Session["idVenta"]));
-                                                                                                                                              //Session["idVenta"] = btnCliente;
+                var ListaDetalleVenta = entity.DetalleVenta.Include("Venta").Include("Producto").Where(x => x.idVenta == idVenta).ToList();
 
                 return PartialView("ListadoDeOrdenes", ListaDetalleVenta);
-
-
-
             }
-
-
-
         }
-
 
         public ActionResult Total(int Id)
         {
@@ -69,6 +48,7 @@ namespace barApp.Controllers
 
             }
         }
+
         [HttpPost]
         public ActionResult AgregarProductoCarrito(DetalleVenta detalleVenta)
         {
@@ -83,7 +63,8 @@ namespace barApp.Controllers
                         fecha = DateTime.Now,
                         IVA = 18,
                         total = 0,
-                        numPago = 1
+                        numPago = 1,
+                        idCuadre = Context.Cuadre.SingleOrDefault(c => !c.cerrado.GetValueOrDefault(false)).idCuadre
                     };
 
                     Context.Factura.Add(factura);
@@ -146,9 +127,7 @@ namespace barApp.Controllers
 
                 foreach (var item in M)
                 {
-
                     var Validar = context.Cliente.Count(x => x.idMesa == item.idMesa);
-
 
                     if (Validar == 0)
                     {
@@ -156,30 +135,19 @@ namespace barApp.Controllers
                         {
                             idMesa = item.idMesa,
                             descripcion = item.descripcion
-
                         };
 
                         ListMesa.Add(ObjMesa);
-
-
-
                     }
-
-
                 }
 
                 return PartialView("ListaMesas", ListMesa);
-
             }
-
-
-
         }
 
         [HttpPost]
         public ActionResult NuevaOrden(Cliente cliente)
         {
-
             using (var Context = new barbdEntities())
             {
                 var ObjCliente = Context.Cliente.Add(cliente);
@@ -222,19 +190,104 @@ namespace barApp.Controllers
             }
 
             Printer printer = new Printer();
+            Dictionary<string, string> list = new Dictionary<string, string>();
+            list.Add("Vendedor/a", waiter);
+            list.Add("Fecha", DateTime.Now.ToString("dd MMM yyyy"));
+            list.Add("Hora", DateTime.Now.ToString("hh:mm:ss tt"));
 
             printer.AddTitle("Despachar");
-
-            Dictionary<string, string> list = new Dictionary<string, string>();
-            list.Add("Mesero/a", waiter);
-            list.Add("Fecha/hora", DateTime.Now.ToString("dd MMM yyyy hh:mm:ss tt"));
+            printer.AddSpace(3);
             printer.AddDescriptionList(list);
-
+            printer.AddSpace(2);
             printer.AddTable(new string[2] { "Descripción", "Cantidad" }, data.ToArray());
 
             printer.Print();
 
             return 1;
+        }
+
+        [HttpPost]
+        public int Prefacturar(int id)
+        {
+            int result = 0;
+            string cliente;
+            string vendedor;
+            decimal subtotal;
+            decimal itbis;
+            string[][] data;
+
+            using (barbdEntities context = new barbdEntities())
+            {
+                Venta venta = context.Venta.Find(id);
+                venta.ordenCerrada = true;
+
+                result = context.SaveChanges();
+                cliente = context.Cliente.Find(venta.idCliente).nombre;
+                vendedor = context.Usuario.Find(venta.idUsuario).nombre;
+                subtotal = (decimal)context.DetalleVenta.Where(vd => vd.idVenta == id).Sum(vd => vd.subTotal);
+                itbis = context.DetalleVenta.Where(vd => vd.idVenta == id).Sum(vd => vd.precioVenta).GetValueOrDefault(0) * 0.18m;
+                data =
+                    context.DetalleVenta
+                    .Where(vd => vd.idVenta == id)
+                    .AsEnumerable()
+                    .GroupBy(
+                        vd => vd.Producto,
+                        vd => new {
+                            vd.cantidad,
+                            vd.precioVenta,
+                            vd.subTotal
+                        },
+                        (producto, grupo) => new {
+                            producto.nombre,
+                            producto.idProducto,
+                            cantidad = grupo.Sum(g => g.cantidad),
+                            precioVenta = grupo.Sum(g => g.precioVenta.GetValueOrDefault(0)),
+                            subTotal = grupo.Sum(g => g.subTotal)
+                        }
+                    )
+                    .Select(vd => new string[5] {
+                        vd.nombre.ToUpper(),
+                        vd.idProducto,
+                        Math.Round((decimal)vd.cantidad, 2).ToString("#,0"),
+                        Math.Round(vd.precioVenta, 2).ToString("$#,0.00"),
+                        Math.Round(vd.subTotal, 2).ToString("$#,0.00")
+                    })
+                    .ToArray();
+            }
+
+            Printer printer = new Printer();
+
+            IDictionary<string, string> list1 = new Dictionary<string, string>();
+            list1.Add("Cliente", cliente.ToUpper());
+            list1.Add("Orden", id.ToString());
+            list1.Add("Vendedor/a", vendedor.ToUpper());
+            list1.Add(printer.EmptyListElement);
+            list1.Add("Fecha", DateTime.Now.ToString("dd MMM yyyy"));
+            list1.Add("Hora", DateTime.Now.ToString("hh:mm:ss tt"));
+
+            Dictionary<string, string> tableDetails = new Dictionary<string, string>();
+            tableDetails.Add("Subtotal", (subtotal - itbis).ToString("$#,0.00"));
+            tableDetails.Add("ITBIS", itbis.ToString("$#,0.00"));
+            Dictionary<string, string> tableTotal = new Dictionary<string, string>();
+            tableTotal.Add("TOTAL", subtotal.ToString("$#,0.00"));
+
+            printer.AddTitle("Prefactura");
+            printer.AddSpace(3);
+            printer.AddSubtitle("Información general");
+            printer.AddSpace();
+            printer.AddDescriptionList(list1, 2);
+            printer.AddSpace(2);
+            printer.AddSubtitle("Productos");
+            printer.AddSpace();
+            printer.AddTable(new string[4] { "Código", "Cantidad", "Precio", "Subtotal" }, data, true);
+            printer.AddSpace();
+            printer.AddTableDetails(tableDetails, 4);
+            printer.AddSpace();
+            printer.AddTableDetails(tableTotal, 4);
+
+            printer.Print();
+
+            return result;
         }
     }
 }

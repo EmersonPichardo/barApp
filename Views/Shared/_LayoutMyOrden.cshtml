@@ -290,9 +290,7 @@
 
 
     <script type="text/javascript">
-
-
-
+        var formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', });
 
         document.getElementById("mySidenav").style.width = "250px";
         document.getElementById("main").style.marginLeft = "250px";
@@ -453,7 +451,6 @@
         }
         function sumar() {
             total = total + subtotal;
-            console.info(total);
             $("#TotalaPagar").val(total);
 
         }
@@ -464,7 +461,7 @@
         function fn_dar_eliminar(id) {
             let element = $(event.srcElement);
 
-            valor = element.parents("tr").find("td").eq(4).html();
+            valor = element.parents("tr").find("td").eq(4).attr('name');
 
             $.ajax({
                 type: "POST",
