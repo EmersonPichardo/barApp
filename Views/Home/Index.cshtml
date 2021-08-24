@@ -1,19 +1,17 @@
-﻿
-<div class="row">
-
+﻿<div class="row">
     <!-- Cuadre -->
     <div class="col-xl-3 col-md-6 mb-4" data-toggle="modal" data-target="#Cuadre">
         <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            Generar
+                        <div class="h5 my-1 font-weight-bold text-gray-800">Generar</div>
+                        <div class="text-xs font-weight-bold text-gray-500 text-uppercase">
+                            Cuadre
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">Cuadre</div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        <i class="fas fa-dollar-sign fa-2x text-primary"></i>
                     </div>
                 </div>
             </div>
@@ -26,13 +24,13 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                        <div class="h5 my-1 font-weight-bold text-gray-800">Facturar</div>
+                        <div class="text-xs font-weight-bold text-gray-500 text-uppercase">
                             Cuenta
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">Facturar</div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                        <i class="fas fa-shopping-cart fa-2x text-success"></i>
                     </div>
                 </div>
             </div>
@@ -45,18 +43,17 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                            Cuenta
-                        </div>
                         <div class="row no-gutters align-items-center">
                             <div class="col-auto">
-                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">Transferir</div>
+                                <div class="h5 my-1 mr-3 font-weight-bold text-gray-800">Transferir</div>
+                                <div class="text-xs font-weight-bold text-gray-500 text-uppercase">
+                                    Cuenta
+                                </div>
                             </div>
-
                         </div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-people-arrows fa-2x text-gray-300"></i>
+                        <i class="fas fa-people-arrows fa-2x text-info"></i>
                     </div>
                 </div>
             </div>
@@ -69,69 +66,58 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                        <div class="h5 my-1 font-weight-bold text-gray-800">Enlazar</div>
+                        <div class="text-xs font-weight-bold text-gray-500 text-uppercase">
                             Cuenta
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">Enlazar</div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-link fa-2x text-gray-300"></i>
+                        <i class="fas fa-link fa-2x  text-warning"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-
     <!--Grafico -->
-
-    <div class="col-xl-12 col-lg-7">
+    <div class="col-12">
         <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Cuentas</h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink" style="">
-                        <div class="dropdown-header">Informes</div>
-                        <a class="dropdown-item" href="#">Monto Facturado</a>
-                        <a class="dropdown-item" href="#">Monto Sin Facturar</a>
+                <div class="d-flex flex-lg-row align-items-center justify-content-end">
+                    <p id="ChartSelected" class="text-primary my-0 mr-3">Todos</p>
+
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
+                            <div class="dropdown-header">Empleados</div>
+                            <a class="dropdown-item" href="#" onclick="ChangeChart(0)">Todos</a>
+
+                            @for (int index = 0; index < ViewBag.Usuarios.Length; index++)
+                            {
+                                <a class="dropdown-item" href="#" onclick="ChangeChart(@(ViewBag.Usuarios[index].idUsuario))">@(ViewBag.Usuarios[index].nombre)</a>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                <div class="chart-pie pt-4 pb-2">
-                    <div class="chartjs-size-monitor">
-                        <div class="chartjs-size-monitor-expand">
-                            <div class="">
-                            </div>
-                        </div><div class="chartjs-size-monitor-shrink">
-                            <div class="">
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="col-6">
+                        <canvas id="cuentas"></canvas>
                     </div>
-                    <canvas id="myPieChart" width="498" height="208" style="display: block; width: 498px; height: 208px;" class="chartjs-render-monitor"></canvas>
-                </div>
-                <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                        <i class="fas fa-circle text-success"></i> Abiertas 55
-                    </span>
-                    <span class="mr-2">
-                        <i class="fas fa-circle text-primary"></i> Cerradas 45
-                    </span>
-
-
+                    <div class="col-6">
+                        <canvas id="montos"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-
 
 @* Cuadre...................................................................*@
 
@@ -155,12 +141,7 @@
     </div>
 </div>
 
-
-
-
-
 @*Facturar...................................................................*@
-
 
 <div class="modal fade" id="Facturar" tabindex="-1" role="dialog" aria-labelledby="Cuadre" aria-hidden="true" data-backdrop="true" data-keyboard="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -192,7 +173,6 @@
                         </div>
                     }
 
-
                     <div>
                         <br />
                         <button type="button" class="btn btn-warning">Descuento %</button>
@@ -205,14 +185,10 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary">Facturar</button>
-
             </div>
         </div>
     </div>
 </div>
-
-
-
 
 @*Transferir...................................................................*@
 
@@ -246,7 +222,6 @@
 
                 <br />
 
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -255,7 +230,6 @@
         </div>
     </div>
 </div>
-
 
 @*Enlazar...................................................................*@
 
@@ -273,31 +247,26 @@
 
                 <div class="col mr-2">
 
-
                     <span>Camarer@@</span>
                     @Html.DropDownList("EnlazarOrigen", new SelectList(ViewBag.VendedorOrigen, "idUsuario", "nombre", 0), "Seleccionar", new { @class = "form-control", @onchange = "Enlazar()" })
                     <br />
                     <span>Cuentas</span>
                     @Html.ListBox("lbxOrigenEnlazar", new SelectList(ViewBag.ClienteOrigen, "VendedorId", "Nombre", 1), new
-                    {
-                        @class = "form-control",
-                        @style = "height:225px"
-                    })
+               {
+                   @class = "form-control",
+                   @style = "height:225px"
+               })
                     <span class="fa fa-arrow-alt-circle-down fa-2x" style="float:initial" onclick=" enlazarCuenta()"></span>
                     <br />
                     <span>Enlazar</span>
 
-
                     @Html.ListBox("lbxDestinoEnlazar", new SelectList(ViewBag.ClienteOrigen, "VendedorId", "Nombre", 1), new
-                    {
-                        @class = "form-control",
-                        @style = "height:225px"@*, @onclick = "javascript_function()"*@})
-
+               {
+                   @class = "form-control",
+                   @style = "height:225px"@*, @onclick = "javascript_function()"*@})
                 </div>
 
-                <div class="col-lg-6 col-md-6">
-
-                </div>
+                <div class="col-lg-6 col-md-6"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -308,8 +277,130 @@
     </div>
 </div>
 
+<script src="~/vendor/chart.js/Chart.min.js"></script>
 
 <script type="text/javascript">
+    //dashboard....................................................................
+
+    var cuentas = @Html.Raw(ViewBag.CuentasJson);
+    var detalles = @Html.Raw(ViewBag.DetallesJson);
+    var usuarios = @Html.Raw(ViewBag.UsuariosJson);
+    var chartCuentas;
+    var chartMontos;
+
+    $(function () {
+        let cuentasAbiertas = cuentas.filter(c => !c.ordenCerrada);
+        let cuentasCerradas = cuentas.filter(c => c.ordenCerrada);
+        let cuentasAbiertasIds = cuentasAbiertas.map(c => c.idVenta);
+        let cuentasCerradasIds = cuentasCerradas.map(c => c.idVenta);
+        let montoAbiertas = detalles.filter(c => cuentasAbiertasIds.includes(c.idVenta)).map(c => c.subTotal)?.reduce((p, c) => p + c, 0);
+        let montoCerradas = detalles.filter(c => cuentasCerradasIds.includes(c.idVenta)).map(c => c.subTotal)?.reduce((p, c) => p + c, 0);
+
+        chartCuentas = new Chart($('#cuentas')[0], {
+            type: 'doughnut',
+            data: {
+                labels: ["Abiertas", "Cerradas"],
+                datasets: [{
+                    data: [cuentasAbiertas.length, cuentasCerradas.length],
+                    backgroundColor: ['#4e73df', '#1cc88a'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 30,
+                        boxWidth: 15,
+                        fontSize: 16,
+                        fontColor: '#5a5c69',
+                        fontStyle: 'bold',
+                        generateLabels: _generateLabels
+                    },
+                    reverse: true
+                },
+                cutoutPercentage: 70,
+                aspectRatio: 2
+            }
+        });
+
+        chartMontos = new Chart($('#montos')[0], {
+            type: 'bar',
+            data: {
+                labels: ["Cerradas", "Abiertas"],
+                datasets: [{
+                    barThickness: 30,
+                    minBarLength: 2,
+                    data: [montoCerradas, montoAbiertas],
+                    backgroundColor: ['#1cc88a', '#4e73df'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+                isMoney: true
+            },
+            options: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 30,
+                        boxWidth: 15,
+                        fontSize: 16,
+                        fontColor: '#5a5c69',
+                        fontStyle: 'bold',
+                        fullWidth: false,
+                        generateLabels: _generateLabels
+                    }
+                },
+                cutoutPercentage: 70,
+                aspectRatio: 2
+            },
+        });
+    });
+
+    function _generateLabels(chart) {
+        var data = chart.data;
+        if (data.labels.length && data.datasets.length) {
+            return data.labels.map(function (label, i) {
+                let meta = chart.getDatasetMeta(0);
+                let ds = data.datasets[0];
+                let arc = meta.data[i];
+                let custom = arc && arc.custom || {};
+                let getValueAtIndexOrDefault = Chart.helpers.getValueAtIndexOrDefault;
+                let arcOpts = chart.options.elements.arc;
+                let fill = custom.backgroundColor ? custom.backgroundColor : getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
+                let stroke = custom.borderColor ? custom.borderColor : getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
+                let bw = custom.borderWidth ? custom.borderWidth : getValueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
+                let value = chart.config.data.datasets[arc._datasetIndex].data[arc._index];
+                let isMoney = data.isMoney;
+
+                return {
+                    text: label + ": " + (!isMoney ? value : formatter.format(value)),
+                    fillStyle: fill,
+                    strokeStyle: stroke,
+                    lineWidth: bw,
+                    hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+                    index: i
+                };
+            });
+        } else {
+            return [];
+        }
+    }
+
+    function ChangeChart(id) {
+        let cuentasAbiertas = cuentas.filter(c => !c.ordenCerrada && c.idUsuario == (id || c.idUsuario));
+        let cuentasCerradas = cuentas.filter(c => c.ordenCerrada && c.idUsuario == (id || c.idUsuario));
+        let cuentasAbiertasIds = cuentasAbiertas.map(c => c.idVenta);
+        let cuentasCerradasIds = cuentasCerradas.map(c => c.idVenta);
+        let montoAbiertas = detalles.filter(c => cuentasAbiertasIds.includes(c.idVenta)).map(c => c.subTotal).reduce((p, c) => p + c, 0);
+        let montoCerradas = detalles.filter(c => cuentasCerradasIds.includes(c.idVenta)).map(c => c.subTotal).reduce((p, c) => p + c, 0);
+
+        chartCuentas.data.datasets[0].data = [cuentasAbiertas.length, cuentasCerradas.length];
+        chartMontos.data.datasets[0].data = [montoAbiertas, montoCerradas];
+
+        chartCuentas.update();
+        chartMontos.update();
+        $('#ChartSelected').html(usuarios.filter(u => u.idUsuario == id).map(u => u.nombre)[0]);
+    }
 
     var a = 100;
     var b = 200;
@@ -362,8 +453,6 @@
         });
     };
 
-
-
     function TransferirReady() {
 
         var x = document.getElementById("lbxOrigenTranferir");
@@ -390,7 +479,6 @@
 
                                 $("#lbxOrigenTranferir option:selected").remove();
                                 window.alert(response.Mensaje);
-
                             }
                             else if (response.Tipo == "Notificacion") {
                                 window.alert(response.Mensaje);
@@ -398,22 +486,14 @@
                             else if (response.Tipo == "Error") {
                                 window.alert(response.Mensaje);
                             }
-
-
-
                         }
                     });
                 }
-
-
             }
-
         }
-
-
     }
-    //Enlazar....................................................................
 
+    //Enlazar....................................................................
 
     function Enlazar() {
 
@@ -445,28 +525,20 @@
                     //x.options.add(option);
                 }
                 x.appendChild(docfrag);
-
             },
-
         });
     }
-
-
 
     function EnlazarReady() {
 
         var ListadoEnlazar = [];
 
-
         var y = document.getElementById("lbxDestinoEnlazar").childNodes;
         var contador = 0;
 
         for (var destinoEnlazar of y) {
-
-
             ListadoEnlazar[contador] = destinoEnlazar.value
             contador++
-
         }
 
         $.ajax({
@@ -475,7 +547,6 @@
             async: false,
             data: { ListadoEnlazar: ListadoEnlazar },
             success: function (response) {
-
                 if (response.Tipo == "Ready") {
                     $("#lbxDestinoEnlazar").empty();
                     window.alert(response.Mensaje);
@@ -486,15 +557,11 @@
                 else {
                     window.alert("Error Desconocido");
                 }
-
-
             }
         })
     }
 
     function enlazarCuenta() {
-
-
         var y = document.getElementById("lbxOrigenEnlazar");
         var x = document.getElementById("lbxDestinoEnlazar");
 
@@ -507,13 +574,6 @@
                 $("#lbxOrigenEnlazar option:selected").remove();
 
             }
-
         }
-
     }
-
 </script>
-
-
-
-

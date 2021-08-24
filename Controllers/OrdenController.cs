@@ -64,7 +64,7 @@ namespace barApp.Controllers
                         IVA = 18,
                         total = 0,
                         numPago = 1,
-                        idCuadre = Context.Cuadre.SingleOrDefault(c => !c.cerrado.GetValueOrDefault(false)).idCuadre
+                        idCuadre = Context.Cuadre.AsEnumerable().SingleOrDefault(c => !c.cerrado.GetValueOrDefault(false)).idCuadre
                     };
 
                     Context.Factura.Add(factura);
@@ -220,6 +220,8 @@ namespace barApp.Controllers
             {
                 Venta venta = context.Venta.Find(id);
                 venta.ordenCerrada = true;
+
+                venta.Cliente.idMesa = null;
 
                 result = context.SaveChanges();
                 cliente = context.Cliente.Find(venta.idCliente).nombre;
