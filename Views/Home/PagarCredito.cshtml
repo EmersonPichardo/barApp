@@ -1,0 +1,22 @@
+﻿@model barApp.Creditos
+
+@using (Ajax.BeginForm("PagarCredito", FormMethod.Post, new AjaxOptions { LoadingElementId = "Progress", InsertionMode = InsertionMode.Replace, UpdateTargetId = "Contenedor", OnSuccess = "onSuccessPagarCredito", OnFailure = "onFailureAjax" }))
+{
+    <input required id="id" name="id" type="hidden">
+
+    <div class="form-group">
+        <label for="monto">Monto</label>
+        <input required type="number" class="form-control" id="monto" name="monto" min="0" max="0.01" step="0.01">
+    </div>
+
+    <div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary float-right">Guardar</button>
+    </div>
+}
+
+<script>
+    function onSuccessPagarCredito() {
+        $("#ModalPagarCredito").modal("hide");
+    }
+</script>

@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
+using Zen.Barcode;
 
 namespace barApp.Models
 {
@@ -20,9 +21,10 @@ namespace barApp.Models
 
         public readonly KeyValuePair<string, string> EmptyListElement = new KeyValuePair<string, string>(string.Empty, string.Empty);
 
-        public Printer()
+        public Printer(string printerRoute = "")
         {
             Document = new PrintDocument();
+            Document.PrinterSettings.PrinterName = string.IsNullOrWhiteSpace(printerRoute) ? Document.PrinterSettings.PrinterName : printerRoute;
             TitleFont = new Font("Calibri", 18, FontStyle.Bold);
             SubtitleFont = new Font("Calibri", 12, FontStyle.Bold);
             BodyFont = new Font("Calibri", 10);
@@ -53,19 +55,16 @@ namespace barApp.Models
                 _event.Graphics.DrawString(title.ToUpper(), SubtitleFont, Brush, Width / 2, yCurrent, new StringFormat() { Alignment = StringAlignment.Center });
                 yCurrent += _event.Graphics.MeasureString(title.ToUpper(), SubtitleFont).Height;
             };
-
-            AddSpace(0.5f);
-            AddLine();
         }
 
-        public void AddString(string paragraph, bool bold = false, StringAlignment alignment = StringAlignment.Near)
+        public void AddString(string text, bool bold = false, StringAlignment alignment = StringAlignment.Near)
         {
             Document.PrintPage += delegate (object sender, PrintPageEventArgs _event)
             {
                 StringFormat stringFormat = new StringFormat() { Alignment = alignment, Trimming = StringTrimming.Character };
-                _event.Graphics.DrawString(paragraph, (bold ? BodyFontBold : BodyFont), Brush, Padding, yCurrent, stringFormat);
+                _event.Graphics.DrawString(text, (bold ? BodyFontBold : BodyFont), Brush, (alignment == StringAlignment.Center ? Width / 2 : Padding), yCurrent, stringFormat);
 
-                yCurrent += _event.Graphics.MeasureString(paragraph, (bold ? BodyFontBold : BodyFont)).Height;
+                yCurrent += _event.Graphics.MeasureString(text, (bold ? BodyFontBold : BodyFont)).Height;
             };
         }
 
@@ -156,6 +155,19 @@ namespace barApp.Models
                     yCurrent += yBase * keySize.Height;
                 }
             };
+        }
+
+        public void AddBarCode(string text)
+        {
+            Document.PrintPage += delegate (object sender, PrintPageEventArgs _event)
+            {
+                Image barcode = BarcodeDrawFactory.GetSymbology(BarcodeSymbology.Code128).Draw(text, 36);
+                _event.Graphics.DrawImage(barcode, (Width - barcode.Width) / 2, yCurrent);
+
+                yCurrent += barcode.Height;
+            };
+
+            AddString(text, false, StringAlignment.Center);
         }
 
         public void AddLine()

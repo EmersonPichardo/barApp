@@ -1,11 +1,14 @@
-﻿<div class="row">
+﻿
+@* Botones...................................................................*@
+
+<div class="row">
     <!-- Cuadre -->
-    <div class="col-xl-3 col-md-6 mb-4" data-toggle="modal" data-target="#Cuadre">
+    <div class="col-xl-3 col-md-6 mb-4" data-toggle="modal" data-target="#Cuadre" onclick="CuadreBegin()">
         <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="h5 my-1 font-weight-bold text-gray-800">Generar</div>
+                        <div class="h5 my-1 font-weight-bold text-gray-800">Cierre de caja</div>
                         <div class="text-xs font-weight-bold text-gray-500 text-uppercase">
                             Cuadre
                         </div>
@@ -18,8 +21,8 @@
         </div>
     </div>
 
-    <!-- Caja -->
-    <div class="col-xl-3 col-md-6 mb-4" data-toggle="modal" data-target="#Facturar">
+    <!-- Facturar -->
+    <div class="col-xl-3 col-md-6 mb-4" data-toggle="modal" data-target="#Facturar" onclick="FacturarBegin()">
         <div class="card border-left-success shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -78,202 +81,261 @@
             </div>
         </div>
     </div>
+</div>
 
-    <!--Grafico -->
-    <div class="col-12">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Cuentas</h6>
-                <div class="d-flex flex-lg-row align-items-center justify-content-end">
-                    <p id="ChartSelected" class="text-primary my-0 mr-3">Todos</p>
+@* Grafico...................................................................*@
 
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
-                            <div class="dropdown-header">Empleados</div>
-                            <a class="dropdown-item" href="#" onclick="ChangeChart(0)">Todos</a>
+<div class="col-12">
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Cuentas</h6>
+            <div class="d-flex flex-lg-row align-items-center justify-content-end">
+                <p id="ChartSelected" class="text-primary my-0 mr-3">Todos</p>
 
-                            @for (int index = 0; index < ViewBag.Usuarios.Length; index++)
-                            {
-                                <a class="dropdown-item" href="#" onclick="ChangeChart(@(ViewBag.Usuarios[index].idUsuario))">@(ViewBag.Usuarios[index].nombre)</a>
-                            }
-                        </div>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
+                        <div class="dropdown-header">Empleados</div>
+                        <a class="dropdown-item" href="#" onclick="ChangeChart(0)">Todos</a>
+
+                        @for (int index = 0; index < ViewBag.Vendedores.Length; index++)
+                        {
+                            <a class="dropdown-item" href="#" onclick="ChangeChart(@(ViewBag.Vendedores[index].idUsuario))">@(ViewBag.Vendedores[index].nombre)</a>
+                        }
                     </div>
                 </div>
             </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6">
-                        <canvas id="cuentas"></canvas>
-                    </div>
-                    <div class="col-6">
-                        <canvas id="montos"></canvas>
-                    </div>
+        </div>
+        
+        <!-- Card Body -->
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <canvas id="cuentas"></canvas>
+                </div>
+                <div class="col-6">
+                    <canvas id="montos"></canvas>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-@* Cuadre...................................................................*@
+@* Modals...................................................................*@
 
-<div class="modal fade" id="Cuadre" tabindex="-1" role="dialog" aria-labelledby="Cuadre" aria-hidden="true" data-backdrop="true" data-keyboard="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle"><span class="fas fa-dollar-sign text-primary fa-2x"> Generar Cuadre</span></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="error"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Generar</button>
+<div>
+    @* Cuadre...................................................................*@
+    <div class="modal fade" id="Cuadre" tabindex="-1" role="dialog" aria-labelledby="Cuadre" aria-hidden="true" data-backdrop="true" data-keyboard="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content border-secondary">
+                <div class="modal-header bg-primary text-white align-items-center">
+                    <span class="fas fa-dollar-sign fa-3x mr-4"></span>
+                    <h1 class="modal-title font-weight-bold">Generar cuadre</h1>
+                    <span class="fas fa-times fa-lg p-3" data-dismiss="modal" style="margin: -1rem -1rem -1rem auto; cursor: pointer"></span>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-around">
+                        <dl>
+                            <dt class="text-success font-weight-bold h5 mb-0">Ventas totales</dt>
+                            <dd id="VentasCuadre">--</dd>
+                        </dl>
+                        <dl>
+                            <dt class="text-danger font-weight-bold h5 mb-0">Gastos</dt>
+                            <dd id="GastosCuadre">--</dd>
+                        </dl>
+                        <dl>
+                            <dt class="text-info font-weight-bold h5 mb-0">Ganancias</dt>
+                            <dd id="GananciasCuadre">--</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="CuadreReady()">Generar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@*Facturar...................................................................*@
-
-<div class="modal fade" id="Facturar" tabindex="-1" role="dialog" aria-labelledby="Cuadre" aria-hidden="true" data-backdrop="true" data-keyboard="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle"><span class="fas fa-shopping-cart text-success fa-2x"> Facturar Cuenta</span></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="error"></p>
-
-                <div class="col mr-2">
-                    <span>Camarer@@</span>
-
-                    @Html.DropDownList("VendedoresOrigenFacturar", new SelectList(ViewBag.VendedorOrigen, "idUsuario", "nombre", 0), "Seleccionar", new { @class = "form-control", @onchange = "facturar()" })
-                    <br />
-                    <span>Cuentas</span>
-                    @Html.ListBox("lbxOrigenFacturar", new SelectList(ViewBag.ClienteOrigen, "IdCliente", "Nombre", 1), new { @class = "form-control", @style = "height:225px" })
-                    <br />
-                    <span class="form-check form-check-inline">Modo de Pago</span>
-
-                    @foreach (var item in ViewData["ModoPago"] as IEnumerable<barApp.ModoPago>)
-                    {
-                        <div class="form-check form-check-inline">
-                            <input onclick="InventarioAlmacen()" class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="@item.numPago" checked>
-                            <label class="form-check-label" for="inlineRadio1">@item.nombre</label>
+    @*Facturar...................................................................*@
+    <div class="modal fade" id="Facturar" tabindex="-1" role="dialog" aria-labelledby="Cuadre" aria-hidden="true" data-backdrop="true" data-keyboard="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content border-secondary">
+                <div class="modal-header bg-success text-white align-items-center">
+                    <span class="fas fa-shopping-cart fa-3x mr-4"></span>
+                    <h1 class="modal-title font-weight-bold">Facturar cuenta</h1>
+                    <span class="fas fa-times fa-lg p-3" data-dismiss="modal" style="margin: -1rem -1rem -1rem auto; cursor: pointer"></span>
+                </div>
+                <div class="modal-body">
+                    <div class="col mr-2">
+                        <div class="row">
+                            <div class="col-6">
+                                <h5 class="font-weight-bold">Camarer@@</h5>
+                                @Html.DropDownList("VendedorFacturar", new SelectList(ViewBag.VendedorOrigen, "idUsuario", "nombre", 0), "Seleccionar", new { @class = "form-control", @onchange = "Facturar()" })
+                                @Html.DropDownList("UsuariosFacturar", new SelectList(ViewBag.Usuarios, "idUsuario", "nombre", 0), "Seleccionar", new { @class = "form-control d-none", @onchange = "FacturarHandleChange()" })
+                            </div>
+                            <div class="col-6">
+                                <h5 class="font-weight-bold">Número de orden</h5>
+                                <input id="NumOrdenFacturar" type="text" class="form-control" />
+                            </div>
                         </div>
-                    }
-
-                    <div>
                         <br />
-                        <button type="button" class="btn btn-warning">Descuento %</button>
-                        <button type="button" class="btn btn-info">Credito</button>
-                        <button type="button" class="btn btn-success">Cortesía</button>
+
+                        <h5 class="font-weight-bold">Cuentas</h5>
+                        @Html.ListBox("lbxFacturar", new SelectList(ViewBag.ClienteOrigen, "IdCliente", "Nombre", 1), new { @class = "form-control select-success", @style = "height:225px" })
+                        <br />
+
+                        <div class="row">
+                            <div class="col-7">
+                                <h5 class="font-weight-bold">Modo de Pago</h5>
+                                <div id="FacturarModoContainer" class="d-flex">
+                                    @foreach (var item in ViewData["ModoPago"] as IEnumerable<barApp.ModoPago>)
+                                    {
+                                        <div class="form-check form-check-inline mb-2">
+                                            <input id="@item.numPago" name="modoPagoOptions" type="radio" class="form-check-input" value="@item.numPago" @(item == ((IEnumerable<barApp.ModoPago>)ViewData["ModoPago"]).First() ? "checked" : "")>
+                                            <label class="form-check-label" for="@item.numPago">@item.nombre</label>
+                                            <input class="form-control w-50 ml-3 my-1" style="display: none" name="montosFacturar" data-type="@item.numPago" type="number" step="0.01" min="0" value="0.00">
+                                        </div>
+                                    }
+                                    <div class="form-check form-check-inline mb-3">
+                                        <input id="0" name="modoPagoOptions" type="radio" class="form-check-input" value="0">
+                                        <label class="form-check-label" for="0">Cortesía</label>
+                                    </div>
+                                    <div class="form-check form-check-inline mb-2">
+                                        <input id="-1" name="modoPagoOptions" type="radio" class="form-check-input" value="-1" oninput="FacturarCambiarModo()">
+                                        <label class="form-check-label" for="-1">Mixto</label>
+                                    </div>
+                                </div>
+                                <br />
+
+                                <div>
+                                    <h5 class="d-block mb-2 font-weight-bold">Acciones especiales</h5>
+
+                                    <button id="AplicarDescuentoFacturar" type="button" class="btn btn-info mr-3">Aplicar descuento</button>
+                                    <button id="EnviarCreditoFacturar" type="button" class="btn btn-warning">Enviar a crédito</button>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="position-relative bg-gray-100 border rounded p-3">
+                                    <div class="d-flex justify-content-between">
+                                        <dl class="mb-0">
+                                            <dt>Subtotal</dt>
+                                            <dd class="mb-3" id="SubtotalFacturar">--</dd>
+                                            <dt class="text-success">Total a pagar</dt>
+                                            <dd class="m-0" id="TotalFacturar">--</dd>
+                                        </dl>
+                                        <dl class="mb-0 ml-4">
+                                            <dt>Descuento</dt>
+                                            <dd id="DescuentoFacturar" class="mb-3">--</dd>
+                                            <dt>Acreditado a</dt>
+                                            <dd id="CreditoFacturar" class="m-0">--</dd>
+                                        </dl>
+                                        <input id="CreditoFacturarInput" type="hidden" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Facturar</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="FacturarPre()">Facturar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@*Transferir...................................................................*@
-
-<div class="modal fade" id="Transferir" tabindex="-1" role="dialog" aria-labelledby="Cuadre" aria-hidden="true" data-backdrop="true" data-keyboard="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle"><span class="fas fa-people-arrows text-info fa-2x"> Transferir Cuenta</span></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="error"></p>
-
-                <div class="col mr-2">
-
-                    <span>Camarer@@ Origen</span>
-
-                    @Html.DropDownList("VendedoresOrigen", new SelectList(ViewBag.VendedorOrigen, "idUsuario", "nombre", 0), "Seleccionar", new { @class = "form-control", @onchange = "transferir()" })
-                    <br />
-                    <span>Cuentas</span>
-
-                    @Html.ListBox("lbxOrigenTranferir", new SelectList(ViewBag.ClienteOrigen, "IdCliente", "Nombre", 1), new { @class = "form-control", @style = "height:225px" })
-
-                    <br />
-                    <span>Camarer@@ Destino</span>
-                    @Html.DropDownList("VendedoresDestino", new SelectList(ViewBag.VendedorOrigen, "idUsuario", "nombre", 0), "Seleccionar", new { @class = "form-control" })
-
+    @*Transferir...................................................................*@
+    <div class="modal fade" id="Transferir" tabindex="-1" role="dialog" aria-labelledby="Cuadre" aria-hidden="true" data-backdrop="true" data-keyboard="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content border-secondary">
+                <div class="modal-header bg-info text-white align-items-center">
+                    <span class="fas fa-people-arrows fa-3x mr-4"></span>
+                    <h1 class="modal-title font-weight-bold">Transferir cuenta</h1>
+                    <span class="fas fa-times fa-lg p-3" data-dismiss="modal" style="margin: -1rem -1rem -1rem auto; cursor: pointer"></span>
                 </div>
+                <div class="modal-body">
+                    <div class="col mr-2">
+                        <h5 class="font-weight-bold">Camarer@@ Origen</h5>
+                        @Html.DropDownList("VendedoresOrigen", new SelectList(ViewBag.VendedorOrigen, "idUsuario", "nombre", 0), "Seleccionar", new { @class = "form-control", @onchange = "transferir()" })
+                        <br />
 
-                <br />
+                        <h5 class="font-weight-bold">Cuentas</h5>
+                        @Html.ListBox("lbxOrigenTranferir", new SelectList(ViewBag.ClienteOrigen, "IdCliente", "Nombre", 1), new { @class = "form-control select-info", @style = "height:225px" })
+                        <br />
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="TransferirReady()">Transferir</button>
+                        <h5 class="font-weight-bold">Camarer@@ Destino</h5>
+                        @Html.DropDownList("VendedoresDestino", new SelectList(ViewBag.VendedorOrigen, "idUsuario", "nombre", 0), "Seleccionar", new { @class = "form-control" })
+                    </div>
+                    <br />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-info" onclick="TransferirReady()">Transferir</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@*Enlazar...................................................................*@
-
-<div class="modal fade" id="Enlazar" tabindex="-1" role="dialog" aria-labelledby="Cuadre" aria-hidden="true" data-backdrop="true" data-keyboard="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle"><span class="fas fa-link text-warning fa-2x"> Enlazar Cuenta</span></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="error"></p>
-
-                <div class="col mr-2">
-
-                    <span>Camarer@@</span>
-                    @Html.DropDownList("EnlazarOrigen", new SelectList(ViewBag.VendedorOrigen, "idUsuario", "nombre", 0), "Seleccionar", new { @class = "form-control", @onchange = "Enlazar()" })
-                    <br />
-                    <span>Cuentas</span>
-                    @Html.ListBox("lbxOrigenEnlazar", new SelectList(ViewBag.ClienteOrigen, "VendedorId", "Nombre", 1), new
-               {
-                   @class = "form-control",
-                   @style = "height:225px"
-               })
-                    <span class="fa fa-arrow-alt-circle-down fa-2x" style="float:initial" onclick=" enlazarCuenta()"></span>
-                    <br />
-                    <span>Enlazar</span>
-
-                    @Html.ListBox("lbxDestinoEnlazar", new SelectList(ViewBag.ClienteOrigen, "VendedorId", "Nombre", 1), new
-               {
-                   @class = "form-control",
-                   @style = "height:225px"@*, @onclick = "javascript_function()"*@})
+    @*Enlazar...................................................................*@
+    <div class="modal fade" id="Enlazar" tabindex="-1" role="dialog" aria-labelledby="Cuadre" aria-hidden="true" data-backdrop="true" data-keyboard="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content border-secondary">
+                <div class="modal-header bg-warning text-white align-items-center">
+                    <span class="fas fa-link fa-3x mr-4"></span>
+                    <h1 class="modal-title font-weight-bold">Enlazar cuenta</h1>
+                    <span class="fas fa-times fa-lg p-3" data-dismiss="modal" style="margin: -1rem -1rem -1rem auto; cursor: pointer"></span>
                 </div>
+                <div class="modal-body">
+                    <div class="col mr-2">
+                        <h5 class="font-weight-bold">Camarer@@</h5>
+                        @Html.DropDownList("EnlazarOrigen", new SelectList(ViewBag.VendedorOrigen, "idUsuario", "nombre", 0), "Seleccionar", new { @class = "form-control", @onchange = "Enlazar()" })
+                        <br />
 
-                <div class="col-lg-6 col-md-6"></div>
+                        <h5 class="font-weight-bold">Cuentas</h5>
+                        @Html.ListBox("lbxOrigenEnlazar", new SelectList(ViewBag.ClienteOrigen, "VendedorId", "Nombre", 1), new { @class = "form-control select-warning", @style = "height:225px" })
+                        <span class="fa fa-arrow-alt-circle-down fa-2x" style="float:initial" onclick=" enlazarCuenta()"></span>
+                        <br />
+
+                        <h5 class="font-weight-bold">Enlazar</h5>
+                        @Html.ListBox("lbxDestinoEnlazar", new SelectList(ViewBag.ClienteOrigen, "VendedorId", "Nombre", 1), new { @class = "form-control", @style = "height:225px" })
+                    </div>
+
+                    <div class="col-lg-6 col-md-6"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning" onclick="EnlazarReady()">Enlazar</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="EnlazarReady()">Enlazar</button>
+
+        </div>
+    </div>
+
+    @*Codigo administrador...................................................................*@
+    <div class="modal fade" id="Administrador" tabindex="-1" role="dialog" aria-labelledby="Cuadre" aria-hidden="true" data-backdrop="true" data-keyboard="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content border-secondary">
+                <div class="modal-header bg-success text-white align-items-center">
+                    <span class="fas fa-shopping-cart fa-3x mr-4"></span>
+                    <h1 class="modal-title font-weight-bold">Código de administrador</h1>
+                    <span class="fas fa-times fa-lg p-3" data-dismiss="modal" style="margin: -1rem -1rem -1rem auto; cursor: pointer"></span>
+                </div>
+                <div class="modal-body">
+                    <div class="col mr-2">
+                        <h5 class="font-weight-bold">Código/tarjeta de administrador</h5>
+                        <input id="CodigoAdmin" type="password" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="FacturarValidate()">Continuar</button>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -281,16 +343,15 @@
 
 <script type="text/javascript">
     //dashboard....................................................................
-
-    var cuentas = @Html.Raw(ViewBag.CuentasJson);
-    var detalles = @Html.Raw(ViewBag.DetallesJson);
-    var usuarios = @Html.Raw(ViewBag.UsuariosJson);
+    var cuentas = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Cuentas));
+    var detalles = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Detalles));
+    var usuarios = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.VendedorOrigen));
     var chartCuentas;
     var chartMontos;
 
     $(function () {
-        let cuentasAbiertas = cuentas.filter(c => !c.ordenCerrada);
-        let cuentasCerradas = cuentas.filter(c => c.ordenCerrada);
+        let cuentasAbiertas = cuentas.filter(c => !c.ordenFacturada);
+        let cuentasCerradas = cuentas.filter(c => c.ordenFacturada);
         let cuentasAbiertasIds = cuentasAbiertas.map(c => c.idVenta);
         let cuentasCerradasIds = cuentasCerradas.map(c => c.idVenta);
         let montoAbiertas = detalles.filter(c => cuentasAbiertasIds.includes(c.idVenta)).map(c => c.subTotal)?.reduce((p, c) => p + c, 0);
@@ -387,37 +448,302 @@
     }
 
     function ChangeChart(id) {
-        let cuentasAbiertas = cuentas.filter(c => !c.ordenCerrada && c.idUsuario == (id || c.idUsuario));
-        let cuentasCerradas = cuentas.filter(c => c.ordenCerrada && c.idUsuario == (id || c.idUsuario));
+        let cuentasAbiertas = cuentas.filter(c => !c.ordenFacturada && c.idUsuario == (id || c.idUsuario));
+        let cuentasCerradas = cuentas.filter(c => c.ordenFacturada && c.idUsuario == (id || c.idUsuario));
         let cuentasAbiertasIds = cuentasAbiertas.map(c => c.idVenta);
         let cuentasCerradasIds = cuentasCerradas.map(c => c.idVenta);
-        let montoAbiertas = detalles.filter(c => cuentasAbiertasIds.includes(c.idVenta)).map(c => c.subTotal).reduce((p, c) => p + c, 0);
-        let montoCerradas = detalles.filter(c => cuentasCerradasIds.includes(c.idVenta)).map(c => c.subTotal).reduce((p, c) => p + c, 0);
+        let montoAbiertas = detalles.filter(c => cuentasAbiertasIds.includes(c.idVenta)).map(c => c.subTotal)?.reduce((p, c) => p + c, 0);
+        let montoCerradas = detalles.filter(c => cuentasCerradasIds.includes(c.idVenta)).map(c => c.subTotal)?.reduce((p, c) => p + c, 0);
 
         chartCuentas.data.datasets[0].data = [cuentasAbiertas.length, cuentasCerradas.length];
-        chartMontos.data.datasets[0].data = [montoAbiertas, montoCerradas];
+        chartMontos.data.datasets[0].data = [montoCerradas, montoAbiertas];
 
         chartCuentas.update();
         chartMontos.update();
-        $('#ChartSelected').html(usuarios.filter(u => u.idUsuario == id).map(u => u.nombre)[0]);
+        $('#ChartSelected').html(id ? usuarios.filter(u => u.idUsuario == id).map(u => u.nombre)[0] : 'Todos');
     }
 
     var a = 100;
     var b = 200;
+    var descuentoPopover;
+    var creditoPopover;
+
+    //cuadre....................................................................
+    function CuadreBegin() {
+        let ventas = cuentas.map(c => c.total).reduce((p, c) => p + c);
+        let gastos = @(ViewBag.GastosTotal);
+        let ganacias = ventas - gastos;
+
+        $('#VentasCuadre').text(formatter.format(ventas));
+        $('#GastosCuadre').text(formatter.format(gastos));
+        $('#GananciasCuadre').text(formatter.format(ganacias));
+    }
+
+    function CuadreReady() {
+        $.ajax({
+            url: "../Home/Cuadrar",
+            type: "POST",
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function (response) {
+                if (response.Tipo == "Ready") {
+                    window.alert(response.Mensaje);
+                    location.reload();
+                }
+                else if (response.Tipo == "Notificacion") {
+                    window.alert(response.Mensaje);
+                }
+                else if (response.Tipo == "Error") {
+                    window.alert(response.Mensaje);
+                }
+            }
+        });
+    }
+
+    //facturar....................................................................
+    function FacturarBegin() {
+        $('#lbxFacturar').change(FacturarHandleChange);
+        $('input[name=modoPagoOptions]').change(FacturarHandleChange);
+        $('input[name=modoPagoOptions]').change(FacturarCambiarModo);
+        descuentoPopover = $('#AplicarDescuentoFacturar').popover({
+            placement: 'top',
+            html: true,
+            title: 'Descuento',
+            sanitize: false,
+            content: function () {
+                creditoPopover.popover('hide');
+
+                return (
+                    '<div class="d-flex">' +
+                        `<input id="TempDescuento" class="form-control d-inline" type="number" step="5" min="0" max="100" value="` + $('#DescuentoFacturar').text().replace(/[^\d]/g, '') + `">` +
+                        `<button type="button" class="btn btn-info d-inline ml-3" onclick="FacturarHandleChange()">Aplicar</button>` +
+                    '</div>'
+                );
+            }
+        });
+        creditoPopover = $('#EnviarCreditoFacturar').popover({
+            placement: 'top',
+            html: true,
+            title: 'Descuento',
+            sanitize: false,
+            content: function () {
+                descuentoPopover.popover('hide');
+
+                let clone = $("#UsuariosFacturar").clone();
+                clone.prop('id', 'TempCredito');
+                clone.removeClass('d-none');
+                let select = $('<div />').append(clone);
+
+                setTimeout(() => { $('#TempCredito').val($('#CreditoFacturarInput').val()) }, 0);
+
+                return '<div class="d-flex">' + $(select).html() + '</div>';
+            }
+        });
+
+        FacturarClear();
+    }
+
+    function FacturarClear() {
+        $("#lbxFacturar").empty();
+        $('#NumOrdenFacturar').val('');
+        $('#VendedorFacturar').prop('selectedIndex', 0);
+        $('#SubtotalFacturar').text('--');
+        $('#TotalFacturar').text('--');
+        $('#DescuentoFacturar').text('--');
+        $('#CreditoFacturar').text('--');
+        $('#CreditoFacturarInput').val(undefined);
+    }
+
+    function Facturar() {
+        var Usuario = {}
+
+        var y = document.getElementById("VendedorFacturar");
+        var x = document.getElementById("lbxFacturar");
+        var docfrag = document.createDocumentFragment();
+
+        Usuario.idUsuario = y.options[y.selectedIndex].value;
+        $("#lbxFacturar").empty();
+
+        $.ajax({
+            url: "../Home/FacturarCuenta",
+            data: JSON.stringify(Usuario),
+            type: "POST",
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function (Transferir) {
+                for (var Clientes of Transferir) {
+                    docfrag.appendChild(new Option(Clientes.nombre, Clientes.idCliente));
+                }
+
+                x.appendChild(docfrag);
+                FacturarHandleChange();
+            },
+        });
+    }
+
+    function FacturarHandleChange() {
+        if ($("select#lbxFacturar option:selected").length != 1) {
+            $("#lbxFacturar").get(0).selectedIndex = -1;
+            $('#NumOrdenFacturar').val('');
+            $('#SubtotalFacturar').text('--');
+            $('#TotalFacturar').text('--');
+            $('#DescuentoFacturar').text('--');
+            $('#CreditoFacturar').text('--');
+            $('#CreditoFacturarInput').val(undefined);
+            $('input[name=montosFacturar]').val('0.00');
+            descuentoPopover.popover('hide');
+            creditoPopover.popover('hide');
+            return;
+        }
+
+        let descuentoInput = $('#TempDescuento');
+        let creditoInput = $('#TempCredito option:selected');
+
+        if (descuentoInput.length) {
+            $('#DescuentoFacturar').text(descuentoInput.val() + '%');
+            descuentoPopover.popover('hide');
+        }
+
+        if (creditoInput.length) {
+            $('#CreditoFacturar').text(creditoInput.val() ? creditoInput.text() : '--');
+            $('#CreditoFacturarInput').val(creditoInput.val() ? creditoInput.val() : undefined);
+            creditoPopover.popover('hide');
+        }
+
+        let selected = $($("select#lbxFacturar option:selected")[0]);
+        let modo = $('input[name=modoPagoOptions]:checked').val();
+
+        let monto = selected.text().split(' -- ')[2];
+        let montoNumber = parseFloat(monto?.replace(/[^\d\.]/g, ''));
+        let descuento = parseFloat($('#DescuentoFacturar').text().replace(/[^\d]/g, '')) / 100;
+        let totalDescontar = montoNumber * (isNaN(descuento) ? 0 : descuento);
+        let total = (modo == 0 ? 0 : (montoNumber - totalDescontar));
+
+
+        $('#NumOrdenFacturar').val(selected.val());
+        $('#SubtotalFacturar').text(monto);
+        $('#TotalFacturar').text(formatter.format(total));
+    }
+
+    function FacturarCambiarModo() {
+        if ($(this).val() == -1) {
+            $('input[name=montosFacturar]').each((i, e) => {
+                $(e).show();
+            });
+
+            $('#FacturarModoContainer').addClass('flex-column');
+        } else {
+            $('input[name=montosFacturar]').each((i, e) => {
+                $(e).hide();
+            });
+
+            $('#FacturarModoContainer').removeClass('flex-column');
+        }
+    }
+
+    function FacturarPre() {
+        let descuento = parseFloat($('#DescuentoFacturar').text().replace(/[^\d]/g, ''));
+
+        if (descuento > 0 || $('#CreditoFacturarInput').val()) {
+            $('#Administrador').modal('show');
+        } else {
+            FacturarReady();
+        }
+    }
+
+    function FacturarValidate() {
+        $.ajax({
+            url: "../Login/IsAdmin",
+            type: "POST",
+            data: JSON.stringify({ code: $('#CodigoAdmin').val() }),
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function (response) {
+                if (response.Tipo == "Ready") {
+                    FacturarReady();
+                }
+                else if (response.Tipo == "Notificacion") {
+                    alert(response.Mensaje);
+                }
+                else if (response.Tipo == "Error") {
+                    alert(response.Mensaje);
+                }
+            }
+        });
+    }
+
+    function FacturarReady() {
+        let x = document.getElementById("lbxFacturar");
+        let y = document.getElementById("VendedorFacturar");
+
+        if (x && y && y.selectedIndex >= 1) {
+            let venta = {
+                idVenta: x.options[x.selectedIndex].value,
+                Factura: []
+            }
+            let modo = $('input[name=modoPagoOptions]:checked').val();
+            let selected = $($("select#lbxFacturar option:selected")[0]);
+            let monto = selected.text().split(' -- ')[2];
+            let montoNumber = parseFloat(monto?.replace(/[^\d\.]/g, ''));
+            let descuento = parseFloat($('#DescuentoFacturar').text().replace(/[^\d]/g, '')) / 100;
+            let totalDescontar = montoNumber * (isNaN(descuento) ? 0 : descuento);
+            let total = (modo == 0 ? 0 : (montoNumber - totalDescontar));
+
+            if (modo == -1) {
+                if ([...$('input[name=montosFacturar]').map((_, e) => parseFloat(e.value))].reduce((p, c) => p + c) == total) {
+                    $('input[name=montosFacturar]').each((_, element) => {
+                        venta.Factura.push({
+                            idVenta: x.options[x.selectedIndex].value,
+                            total: element.value,
+                            numPago: element.getAttribute('data-type'),
+                            descuento: descuento * 100,
+                            idUsuario: $('#CreditoFacturarInput').val()
+                        });
+                    });
+                } else {
+                    alert('Los montos no coinciden con el total a pagar');
+                    return
+                }
+            } else {
+                venta.Factura.push({
+                    idVenta: x.options[x.selectedIndex].value,
+                    total: total,
+                    numPago: modo,
+                    descuento: descuento * 100,
+                    idUsuario: $('#CreditoFacturarInput').val()
+                });
+            }
+
+            $.ajax({
+                url: "../Home/FacturarReady",
+                type: "POST",
+                data: JSON.stringify(venta),
+                contentType: 'application/json;charset=UTF-8',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.Tipo == "Ready") {
+                        $('#Administrador').modal('hide');
+                        $("#lbxFacturar option:selected").remove();
+                        FacturarHandleChange();
+
+                        alert(response.Mensaje);
+                    }
+                    else if (response.Tipo == "Notificacion") {
+                        alert(response.Mensaje);
+                    }
+                    else if (response.Tipo == "Error") {
+                        alert(response.Mensaje);
+                    }
+                }
+            });
+        }
+    }
 
     //transferir....................................................................
-
     function TransferirClear() {
         $("#lbxOrigenTranferir").empty();
         $('#VendedoresOrigen').prop('selectedIndex', 0);
         $('#VendedoresDestino').prop('selectedIndex', 0);
-    }
-
-    function EnlazarClear() {
-        $("#lbxDestinoEnlazar").empty();
-        $("#lbxOrigenEnlazar").empty();
-        $('#EnlazarOrigen').prop('selectedIndex', 0);
-
     }
 
     function transferir() {
@@ -451,7 +777,7 @@
             },
 
         });
-    };
+    }
 
     function TransferirReady() {
 
@@ -494,10 +820,14 @@
     }
 
     //Enlazar....................................................................
+    function EnlazarClear() {
+        $("#lbxDestinoEnlazar").empty();
+        $("#lbxOrigenEnlazar").empty();
+        $('#EnlazarOrigen').prop('selectedIndex', 0);
+
+    }
 
     function Enlazar() {
-
-
         $("#lbxDestinoEnlazar").empty();
         var y = document.getElementById("EnlazarOrigen");
         var x = document.getElementById("lbxOrigenEnlazar");
@@ -530,7 +860,6 @@
     }
 
     function EnlazarReady() {
-
         var ListadoEnlazar = [];
 
         var y = document.getElementById("lbxDestinoEnlazar").childNodes;

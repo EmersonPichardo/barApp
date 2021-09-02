@@ -12,18 +12,22 @@ namespace barApp
     using System;
     using System.Collections.Generic;
     
-    public partial class Roles
+    public partial class Creditos
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Roles()
+        public Creditos()
         {
-            this.Usuario = new HashSet<Usuario>();
+            this.Pagos = new HashSet<Pagos>();
         }
     
-        public int idRol { get; set; }
-        public string nombre { get; set; }
+        public int id { get; set; }
+        public Nullable<decimal> numFactura { get; set; }
+        public int idUsuario { get; set; }
+        public decimal MontoRestante { get; set; }
     
+        public virtual Factura Factura { get; set; }
+        public virtual Usuario Usuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Usuario> Usuario { get; set; }
+        public virtual ICollection<Pagos> Pagos { get; set; }
     }
 }

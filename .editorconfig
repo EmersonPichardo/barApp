@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS0114: El miembro oculta el miembro heredado. Falta una contraseña de invalidación
+dotnet_diagnostic.CS0114.severity = suggestion

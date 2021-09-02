@@ -1,0 +1,91 @@
+﻿<link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+<div class="card mb-4 py-md-3 border-right-0 text-center">
+    <h1 class="h3 mb-0 text-gray-800">Cuentas por cobrar</h1>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <ul class="nav nav-pills" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" data-toggle="pill" href="#home" role="tab">Cuentas abiertas</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" data-toggle="pill" href="#history" role="tab">Histórico</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel">
+                        <div id="dataTable_filter" class="dataTables_filter">
+                            <label>
+                                Buscar:
+                                <input type="search" id="Search" onkeyup="SearchTable()" class="form-control form-control-sm">
+                            </label>
+                        </div>
+                        <h5 class="text-secondary text-center mb-4">Cuentas abiertas</h5>
+                        @{Html.RenderPartial("ListaCreditos");}
+                    </div>
+
+                    <div class="tab-pane fade" id="history" role="tabpanel">
+                        <div id="dataTable_filter" class="dataTables_filter">
+                            <label>
+                                Buscar:
+                                <input type="search" id="Search2" onkeyup="SearchTable2()" class="form-control form-control-sm">
+                            </label>
+                        </div>
+                        <h5 class="text-secondary text-center mb-4">Histórico</h5>
+                        @{Html.RenderPartial("ListaHistoricoCreditos");}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var creditos = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.AllCreditos));
+
+    //buscar categoria...............................................................
+    function SearchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("Search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dataTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    //buscar historico...............................................................
+    function SearchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("Search2");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dataTable2");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

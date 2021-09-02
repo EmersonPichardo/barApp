@@ -54,26 +54,20 @@ namespace barApp.Controllers
         {
             using (var Context = new barbdEntities())
             {
-                detalleVenta.numFactura = Context.DetalleVenta.FirstOrDefault(dv => dv.idVenta == detalleVenta.idVenta)?.numFactura ?? 0;
-
-                if (detalleVenta.numFactura == 0)
-                {
-                    Factura factura = new Factura()
-                    {
-                        fecha = DateTime.Now,
-                        IVA = 18,
-                        total = 0,
-                        numPago = 1,
-                        idCuadre = Context.Cuadre.AsEnumerable().SingleOrDefault(c => !c.cerrado.GetValueOrDefault(false)).idCuadre
-                    };
-
-                    Context.Factura.Add(factura);
-                    Context.SaveChanges();
-
-                    detalleVenta.numFactura = factura.numFactura;
-                }
-
                 Producto producto = Context.Producto.Find(detalleVenta.idProducto);
+
+                List<Models.Inventario> queryInventario = Context.Database.SqlQuery<Models.Inventario>("exec sp_inventarioDisponibleBar").ToList();
+                bool productoExiste = queryInventario.Any(i => i.IdProducto == producto.idProducto);
+                int cantidadInventario = queryInventario.SingleOrDefault(i => i.IdProducto == producto.idProducto).Cantidad;
+                if (!productoExiste || cantidadInventario < detalleVenta.cantidad)
+                {
+                    string error =
+                        cantidadInventario < 1
+                        ? "No se puede agregar el producto, no quedan en el local"
+                        : "No se puede agregar el producto, solo quedan " + cantidadInventario + " en el local";
+
+                    return Json(new { error });
+                }
 
                 detalleVenta.subTotal = (float)(detalleVenta.cantidad * producto.precioVenta);
                 detalleVenta.despachada = false;
@@ -81,11 +75,11 @@ namespace barApp.Controllers
                 detalleVenta.precioEntrada = producto.precioAlmacen;
 
                 Context.DetalleVenta.Add(detalleVenta);
-                Context.SaveChanges();
 
                 Venta venta = Context.Venta.Find(detalleVenta.idVenta);
                 venta.total += detalleVenta.subTotal;
                 Context.Entry(venta).State = System.Data.Entity.EntityState.Modified;
+
                 Context.SaveChanges();
 
                 return Json(new
@@ -159,8 +153,9 @@ namespace barApp.Controllers
                     idCliente = ObjCliente.idCliente,
                     fecha = DateTime.Now,
                     IVA = Context.Impuesto.Single().Itbis.Value,
-                    idUsuario = Convert.ToInt32(Session["IdUsuario"])
-                };
+                    idUsuario = Convert.ToInt32(Session["IdUsuario"]),
+                    idCuadre = Context.Cuadre.AsEnumerable().SingleOrDefault(c => !c.cerrado.GetValueOrDefault(false)).idCuadre
+            };
 
                 Context.Venta.Add(ObjVenta);
                 Context.SaveChanges();
@@ -171,7 +166,7 @@ namespace barApp.Controllers
         }
 
         [HttpPost]
-        public int Despachar(string waiter, int[] ids)
+        public int Despachar(string waiter, int[] ids, string instrucciones)
         {
             List<string[]> data = new List<string[]>();
 
@@ -199,7 +194,14 @@ namespace barApp.Controllers
             printer.AddSpace(3);
             printer.AddDescriptionList(list);
             printer.AddSpace(2);
-            printer.AddTable(new string[2] { "Descripción", "Cantidad" }, data.ToArray());
+            printer.AddTable(new string[2] { "Producto", "Cantidad" }, data.ToArray());
+
+            if (!string.IsNullOrWhiteSpace(instrucciones))
+            {
+                printer.AddSpace(2);
+                printer.AddString("Instrucciones especiales:", true);
+                printer.AddString(instrucciones);
+            }
 
             printer.Print();
 
@@ -210,6 +212,10 @@ namespace barApp.Controllers
         public int Prefacturar(int id)
         {
             int result = 0;
+            string empresa;
+            string rnc;
+            string telefono;
+            string saludo;
             string cliente;
             string vendedor;
             decimal subtotal;
@@ -218,6 +224,11 @@ namespace barApp.Controllers
 
             using (barbdEntities context = new barbdEntities())
             {
+                empresa = context.Configuraciones.Find("Empresa").Value;
+                rnc = context.Configuraciones.Find("RNC").Value;
+                telefono = context.Configuraciones.Find("Telefono").Value;
+                saludo = context.Configuraciones.Find("Saludo").Value;
+
                 Venta venta = context.Venta.Find(id);
                 venta.ordenCerrada = true;
 
@@ -249,7 +260,7 @@ namespace barApp.Controllers
                     )
                     .Select(vd => new string[5] {
                         vd.nombre.ToUpper(),
-                        vd.idProducto,
+                        vd.idProducto.PadLeft(5, '0'),
                         Math.Round((decimal)vd.cantidad, 2).ToString("#,0"),
                         Math.Round(vd.precioVenta, 2).ToString("$#,0.00"),
                         Math.Round(vd.subTotal, 2).ToString("$#,0.00")
@@ -263,7 +274,7 @@ namespace barApp.Controllers
             list1.Add("Cliente", cliente.ToUpper());
             list1.Add("Orden", id.ToString());
             list1.Add("Vendedor/a", vendedor.ToUpper());
-            list1.Add(printer.EmptyListElement);
+            list1.Add("RNC", rnc);
             list1.Add("Fecha", DateTime.Now.ToString("dd MMM yyyy"));
             list1.Add("Hora", DateTime.Now.ToString("hh:mm:ss tt"));
 
@@ -274,18 +285,25 @@ namespace barApp.Controllers
             tableTotal.Add("TOTAL", subtotal.ToString("$#,0.00"));
 
             printer.AddTitle("Prefactura");
-            printer.AddSpace(3);
+            printer.AddSpace(2);
+            printer.AddString(empresa, true, System.Drawing.StringAlignment.Center);
+            printer.AddString(telefono, alignment: System.Drawing.StringAlignment.Center);
+            printer.AddSpace(2);
             printer.AddSubtitle("Información general");
             printer.AddSpace();
             printer.AddDescriptionList(list1, 2);
             printer.AddSpace(2);
             printer.AddSubtitle("Productos");
             printer.AddSpace();
-            printer.AddTable(new string[4] { "Código", "Cantidad", "Precio", "Subtotal" }, data, true);
+            printer.AddTable(new string[4] { "Producto", "Cantidad", "Precio", "Subtotal" }, data, true);
             printer.AddSpace();
             printer.AddTableDetails(tableDetails, 4);
             printer.AddSpace();
             printer.AddTableDetails(tableTotal, 4);
+            printer.AddSpace(2);
+            printer.AddBarCode(id.ToString());
+            printer.AddString(saludo, alignment: System.Drawing.StringAlignment.Center);
+            printer.AddSpace(2);
 
             printer.Print();
 

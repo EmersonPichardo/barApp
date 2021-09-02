@@ -1,4 +1,4 @@
-﻿@{
+﻿des@{
     Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutMyOrden.cshtml";
     ViewBag.Title = "Sistema Ventas Orden";
 }
@@ -9,6 +9,8 @@
 <link rel="stylesheet" href="~/css/keyboard.css" />
 <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+
+<script src="~/Scripts/jquery.keyboard.js"></script>
 
 <div id="DivUserList1">
     <div id="main" class="menu-box">
@@ -180,7 +182,7 @@
             <span class="text align-text-top text-dark mx-md-3 fa" style="border:none">No. Orden:</span><input style="font-size:20px; font-weight:900; width:10%" type="text" id="idVentas" ng-model="idVentas" readonly required />
 
             <div style="float:right">
-                <input type="submit" class="btn btn-warning" id="Despachar" name="btnOrden" value="Despachar" />
+                <input type="submit" class="btn btn-warning" value="Despachar" onclick="ModalDespachar()" />
             </div>
 
             <div style="float:right">
@@ -210,8 +212,56 @@
     </div>
 </div>
 
-<script src="~/Scripts/jquery.keyboard.js"></script>
+<div id="DespacharModal" class="modal fade" role="document">
+    <div class="modal-dialog  modal-lg" style="overflow:visible">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <h4 class="modal-title" style="color:aliceblue">Instrucciones especiales</h4>
+            </div>
+            <div class="modal-body" style="overflow:auto">
+                <div class="form-group">
+                    <label for="InstruccionEspecial">Instrucciones especiales</label>
+                    <textarea class="form-control" id="InstruccionEspecial" rows="3"></textarea>
+                </div>
+
+                <script>
+                    $('#InstruccionEspecial').keyboard({
+                        layout: 'custom',
+                        customLayout: {
+                            'normal': [
+                                'q w e r t y u i o p {bksp}',
+                                'a s d f g h j k l',
+                                '{s} z x c v b n m @@ .',
+                                '{space} _ - {accept}'
+                            ]
+                        },
+                        restrictInput: false, // Prevent keys not in the displayed keyboard from being typed in
+                        preventPaste: true,  // prevent ctrl-v and right click
+                        autoAccept: true,
+                        openOn: 'click'
+                    })
+                </script>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="Despachar()">Aceptar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <script type="text/javascript">
+    setTimeout(() => {
+        $('#DespacharModal').on('show.bs.modal', function (e) {
+            $('#InstruccionEspecial').val('');
+        });
+        $('#DespacharModal').on('shown.bs.modal', function (e) {
+            $('#InstruccionEspecial').click()
+        });
+    }, 0);
+
     function Bajar() {
         $(window).on('scroll', function () {
             if ($(this).scrollTop() < 10) {
@@ -285,6 +335,11 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (response) {
+                        if (response.error) {
+                            alert(response.error);
+                            return;
+                        }
+
                         var Producto = {}
                         Producto.idProducto = response.producto.idProducto
                         Producto.Nombre = response.producto.nombre
@@ -403,7 +458,18 @@
         });
     });
 
-    $("#Despachar").click(function () {
+    function ModalDespachar() {
+        let productos = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(((List<Producto>)ViewBag.Producto).Where(p => p.Categoria.idTipoCategoria == 2).Select(p => p.idProducto)));
+        let ids = [...$('#detalle tr.borrable').map((_, b) => b.cells[0].innerText)];
+
+        if (productos.some(p => ids.includes(p))) {
+            $('#DespacharModal').modal('show');
+        } else {
+            Despachar();
+        }
+    }
+
+    function Despachar() {
         let ids = $('#detalle tr.borrable').map((_, b) => parseInt(b.cells[0].id));
 
         if (!$("#idVentas").val()) {
@@ -418,7 +484,8 @@
 
         let data = {
             waiter: $('span.text-dark')[0].innerText.replace('Vendedor: ', ''),
-            ids: [...ids]
+            ids: [...ids],
+            instrucciones: $('#InstruccionEspecial').val()
         }
 
         $.ajax({
@@ -431,7 +498,7 @@
                 $('#detalle tr.borrable').each((_, tr) => {
                     tr.removeAttribute('class');
                     $(tr.cells[tr.cells.length - 2]).text('Si');
-                    tr.cells[tr.cells.length - 1].remove();
+                    //tr.cells[tr.cells.length - 1].remove();
                 });
 
                 alert('Productos despachados con éxitos');
@@ -440,7 +507,7 @@
                 alert(request.responseText);
             }
         });
-    });
+    };
 
     document.getElementById("mySidenav").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
@@ -554,7 +621,8 @@
 
                                     restrictInput: false, // Prevent keys not in the displayed keyboard from being typed in
                                     preventPaste: true,  // prevent ctrl-v and right click
-                                    autoAccept: true
+                                    autoAccept: true,
+                                    openOn: 'click'
                                 })
 
                         </script>
@@ -564,16 +632,7 @@
                             <input type="button" class="btn btn-dark" data-toggle="modal" onclick="BuscarMesas()" data-target="#Mesas" name="name" value="Mesa" />
                             <label class="text text-black" style="font-size:x-large" id="lblMesa"></label>
                         </div>
-
-                        @*<input type="text" hidden class="text text-warning col-md-12" placeholder="Apellido" name="Apellido" id="Apellido" />
-                            <input type="text" hidden class="text text-warning col-md-12" placeholder="Cedula" name="Cedula" id="Cedula" />
-                            <input type="text" hidden class="text text-warning col-md-12" placeholder="Referencia" name="Referencia" id="Referencia" />*@
                         <br />
-                        <br />
-                        <div>
-                            <input type="button" onclick="NuevaOrden_()" class="btn btn-success" value="Guardar" />
-                            @*<button type="submit" class="btn btn-success" data-dismiss="modal">Guardar</button>*@
-                        </div>
                     </div>
                     @*}*@
 
@@ -582,8 +641,8 @@
 
 
                 <div class="modal-footer">
-
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-default float-left" data-dismiss="modal">Cerrar</button>
+                    <input type="button" onclick="NuevaOrden_()" class="btn btn-success" value="Guardar" />
                 </div>
             </div>
 

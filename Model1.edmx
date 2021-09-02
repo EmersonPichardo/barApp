@@ -21,6 +21,22 @@
           <Property Name="nombre" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="idMesa" Type="int" />
         </EntityType>
+        <EntityType Name="Configuraciones">
+          <Key>
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="Key" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Value" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Creditos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="numFactura" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="idUsuario" Type="int" Nullable="false" />
+          <Property Name="MontoRestante" Type="money" Nullable="false" />
+        </EntityType>
         <EntityType Name="Cuadre">
           <Key>
             <PropertyRef Name="idCuadre" />
@@ -34,7 +50,6 @@
             <PropertyRef Name="idDetalle" />
           </Key>
           <Property Name="idDetalle" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="numFactura" Type="numeric" Precision="18" Scale="0" Nullable="false" />
           <Property Name="idVenta" Type="numeric" Precision="18" Scale="0" Nullable="false" />
           <Property Name="subTotal" Type="real" Nullable="false" />
           <Property Name="idProducto" Type="nvarchar" MaxLength="20" />
@@ -54,7 +69,8 @@
           <Property Name="total" Type="real" Nullable="false" />
           <Property Name="numPago" Type="int" Nullable="false" />
           <Property Name="descuento" Type="money" />
-          <Property Name="idCuadre" Type="int" />
+          <Property Name="idVenta" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="TieneCedito" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Gastos">
           <Key>
@@ -105,6 +121,15 @@
           <Property Name="numPago" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="nombre" Type="nvarchar" MaxLength="25" Nullable="false" />
           <Property Name="otroDetalles" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Pagos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idCredito" Type="int" Nullable="false" />
+          <Property Name="Monto" Type="money" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="Producto">
           <Key>
@@ -168,6 +193,7 @@
           <Property Name="ordenCerrada" Type="bit" />
           <Property Name="idUsuario" Type="int" />
           <Property Name="ordenFacturada" Type="bit" />
+          <Property Name="idCuadre" Type="int" />
         </EntityType>
         <Association Name="FK__detalleFa__idPed__239E4DCF">
           <End Role="Venta" Type="Self.Venta" Multiplicity="1" />
@@ -205,6 +231,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Creditos_Factura">
+          <End Role="Factura" Type="Self.Factura" Multiplicity="0..1" />
+          <End Role="Creditos" Type="Self.Creditos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Factura">
+              <PropertyRef Name="numFactura" />
+            </Principal>
+            <Dependent Role="Creditos">
+              <PropertyRef Name="numFactura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Creditos_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Creditos" Type="Self.Creditos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="Creditos">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_detalleFactura_productor">
           <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
           <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
@@ -217,18 +267,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Factura_Cuadre">
-          <End Role="Cuadre" Type="Self.Cuadre" Multiplicity="0..1" />
-          <End Role="Factura" Type="Self.Factura" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cuadre">
-              <PropertyRef Name="idCuadre" />
-            </Principal>
-            <Dependent Role="Factura">
-              <PropertyRef Name="idCuadre" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_factura_modoPago">
           <End Role="ModoPago" Type="Self.ModoPago" Multiplicity="1" />
           <End Role="Factura" Type="Self.Factura" Multiplicity="*" />
@@ -238,6 +276,18 @@
             </Principal>
             <Dependent Role="Factura">
               <PropertyRef Name="numPago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Factura_Venta">
+          <End Role="Venta" Type="Self.Venta" Multiplicity="0..1" />
+          <End Role="Factura" Type="Self.Factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="idVenta" />
+            </Principal>
+            <Dependent Role="Factura">
+              <PropertyRef Name="idVenta" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -277,6 +327,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Pagos_Creditos">
+          <End Role="Creditos" Type="Self.Creditos" Multiplicity="1" />
+          <End Role="Pagos" Type="Self.Pagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Creditos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="idCredito" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_producto_producto_CategoriaId">
           <End Role="Categoria" Type="Self.Categoria" Multiplicity="0..1" />
           <End Role="Producto" Type="Self.Producto" Multiplicity="*" />
@@ -313,6 +375,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Venta_Cuadre">
+          <End Role="Cuadre" Type="Self.Cuadre" Multiplicity="0..1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuadre">
+              <PropertyRef Name="idCuadre" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="idCuadre" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Venta_Usuario">
           <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
           <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
@@ -340,6 +414,8 @@
         <EntityContainer Name="barbdModelStoreContainer">
           <EntitySet Name="Categoria" EntityType="Self.Categoria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Configuraciones" EntityType="Self.Configuraciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Creditos" EntityType="Self.Creditos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cuadre" EntityType="Self.Cuadre" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DetalleVenta" EntityType="Self.DetalleVenta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Factura" EntityType="Self.Factura" Schema="dbo" store:Type="Tables" />
@@ -349,6 +425,7 @@
           <EntitySet Name="InventarioBar" EntityType="Self.InventarioBar" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Mesa" EntityType="Self.Mesa" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ModoPago" EntityType="Self.ModoPago" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pagos" EntityType="Self.Pagos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Suplidor" EntityType="Self.Suplidor" Schema="dbo" store:Type="Tables" />
@@ -367,16 +444,24 @@
             <End Role="Mesa" EntitySet="Mesa" />
             <End Role="Cliente" EntitySet="Cliente" />
           </AssociationSet>
+          <AssociationSet Name="FK_Creditos_Factura" Association="Self.FK_Creditos_Factura">
+            <End Role="Factura" EntitySet="Factura" />
+            <End Role="Creditos" EntitySet="Creditos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Creditos_Usuario" Association="Self.FK_Creditos_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Creditos" EntitySet="Creditos" />
+          </AssociationSet>
           <AssociationSet Name="FK_detalleFactura_productor" Association="Self.FK_detalleFactura_productor">
             <End Role="Producto" EntitySet="Producto" />
             <End Role="DetalleVenta" EntitySet="DetalleVenta" />
           </AssociationSet>
-          <AssociationSet Name="FK_Factura_Cuadre" Association="Self.FK_Factura_Cuadre">
-            <End Role="Cuadre" EntitySet="Cuadre" />
-            <End Role="Factura" EntitySet="Factura" />
-          </AssociationSet>
           <AssociationSet Name="FK_factura_modoPago" Association="Self.FK_factura_modoPago">
             <End Role="ModoPago" EntitySet="ModoPago" />
+            <End Role="Factura" EntitySet="Factura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Factura_Venta" Association="Self.FK_Factura_Venta">
+            <End Role="Venta" EntitySet="Venta" />
             <End Role="Factura" EntitySet="Factura" />
           </AssociationSet>
           <AssociationSet Name="FK_idProducto_PK_idProducto_t_producto" Association="Self.FK_idProducto_PK_idProducto_t_producto">
@@ -391,6 +476,10 @@
             <End Role="Producto" EntitySet="Producto" />
             <End Role="InventarioBar" EntitySet="InventarioBar" />
           </AssociationSet>
+          <AssociationSet Name="FK_Pagos_Creditos" Association="Self.FK_Pagos_Creditos">
+            <End Role="Creditos" EntitySet="Creditos" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
           <AssociationSet Name="FK_producto_producto_CategoriaId" Association="Self.FK_producto_producto_CategoriaId">
             <End Role="Categoria" EntitySet="Categoria" />
             <End Role="Producto" EntitySet="Producto" />
@@ -401,6 +490,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_venta_cliente" Association="Self.FK_venta_cliente">
             <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_Cuadre" Association="Self.FK_Venta_Cuadre">
+            <End Role="Cuadre" EntitySet="Cuadre" />
             <End Role="Venta" EntitySet="Venta" />
           </AssociationSet>
           <AssociationSet Name="FK_Venta_Usuario" Association="Self.FK_Venta_Usuario">
@@ -432,9 +525,9 @@
           </Key>
           <Property Name="idCliente" Type="Decimal" Precision="18" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="nombre" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Venta" Relationship="Self.FK_venta_cliente" FromRole="Cliente" ToRole="Venta" />
           <Property Name="idMesa" Type="Int32" />
           <NavigationProperty Name="Mesa" Relationship="barbdModel.FK_Cliente_Mesa" FromRole="Cliente" ToRole="Mesa" />
+          <NavigationProperty Name="Venta" Relationship="barbdModel.FK_venta_cliente" FromRole="Cliente" ToRole="Venta" />
         </EntityType>
         <EntityType Name="Cuadre">
           <Key>
@@ -443,39 +536,8 @@
           <Property Name="idCuadre" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fecha" Type="DateTime" Precision="0" />
           <Property Name="cerrado" Type="Boolean" />
-          <NavigationProperty Name="Factura" Relationship="Self.FK_Factura_Cuadre" FromRole="Cuadre" ToRole="Factura" />
           <NavigationProperty Name="Gastos" Relationship="barbdModel.PK_Cuadre_FK_Gastos" FromRole="Cuadre" ToRole="Gastos" />
-        </EntityType>
-        <EntityType Name="DetalleVenta">
-          <Key>
-            <PropertyRef Name="idDetalle" />
-          </Key>
-          <Property Name="idDetalle" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="numFactura" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="idVenta" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="subTotal" Type="Single" Nullable="false" />
-          <Property Name="idProducto" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="cantidad" Type="Int32" Nullable="false" />
-          <Property Name="despachada" Type="Boolean" />
-          <Property Name="precioVenta" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="precioEntrada" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="espcial" Type="Boolean" />
-          <NavigationProperty Name="Venta" Relationship="Self.FK__detalleFa__idPed__239E4DCF" FromRole="DetalleVenta" ToRole="Venta" />
-          <NavigationProperty Name="Producto" Relationship="Self.FK_detalleFactura_productor" FromRole="DetalleVenta" ToRole="Producto" />
-        </EntityType>
-        <EntityType Name="Factura">
-          <Key>
-            <PropertyRef Name="numFactura" />
-          </Key>
-          <Property Name="numFactura" Type="Decimal" Precision="18" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="IVA" Type="Single" Nullable="false" />
-          <Property Name="total" Type="Single" Nullable="false" />
-          <Property Name="numPago" Type="Int32" Nullable="false" />
-          <Property Name="descuento" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="idCuadre" Type="Int32" />
-          <NavigationProperty Name="Cuadre" Relationship="Self.FK_Factura_Cuadre" FromRole="Factura" ToRole="Cuadre" />
-          <NavigationProperty Name="ModoPago" Relationship="Self.FK_factura_modoPago" FromRole="Factura" ToRole="ModoPago" />
+          <NavigationProperty Name="Venta" Relationship="barbdModel.FK_Venta_Cuadre" FromRole="Cuadre" ToRole="Venta" />
         </EntityType>
         <EntityType Name="Impuesto">
           <Key>
@@ -503,7 +565,7 @@
           <Property Name="numPago" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="otroDetalles" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Factura" Relationship="Self.FK_factura_modoPago" FromRole="ModoPago" ToRole="Factura" />
+          <NavigationProperty Name="Factura" Relationship="barbdModel.FK_factura_modoPago" FromRole="ModoPago" ToRole="Factura" />
         </EntityType>
         <EntityType Name="Producto">
           <Key>
@@ -516,9 +578,9 @@
           <Property Name="precioAlmacen" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="activo" Type="Boolean" />
           <NavigationProperty Name="Categoria" Relationship="Self.FK_producto_producto_CategoriaId" FromRole="Producto" ToRole="Categoria" />
-          <NavigationProperty Name="DetalleVenta" Relationship="Self.FK_detalleFactura_productor" FromRole="Producto" ToRole="DetalleVenta" />
           <NavigationProperty Name="Inventario" Relationship="Self.FK_idProducto_PK_idProducto_t_producto" FromRole="Producto" ToRole="Inventario" />
           <NavigationProperty Name="InventarioBar" Relationship="barbdModel.FK_InventarioBar_PK_PoductoID" FromRole="Producto" ToRole="InventarioBar" />
+          <NavigationProperty Name="DetalleVenta" Relationship="barbdModel.FK_detalleFactura_productor" FromRole="Producto" ToRole="DetalleVenta" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -560,25 +622,10 @@
           <Property Name="resetContrasena" Type="Boolean" />
           <Property Name="idTarjeta" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Roles" Relationship="Self.FK_vendedor_Roles" FromRole="Usuario" ToRole="Roles" />
-          <NavigationProperty Name="Venta" Relationship="Self.FK_Venta_Usuario" FromRole="Usuario" ToRole="Venta" />
           <Property Name="EnvioCorreo" Type="Boolean" />
           <Property Name="Correo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Venta">
-          <Key>
-            <PropertyRef Name="idVenta" />
-          </Key>
-          <Property Name="idVenta" Type="Decimal" Precision="18" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="total" Type="Single" Nullable="false" />
-          <Property Name="idCliente" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="fecha" Type="DateTime" Precision="3" />
-          <Property Name="IVA" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="ordenCerrada" Type="Boolean" />
-          <Property Name="idUsuario" Type="Int32" />
-          <NavigationProperty Name="Cliente" Relationship="Self.FK_venta_cliente" FromRole="Venta" ToRole="Cliente" />
-          <NavigationProperty Name="DetalleVenta" Relationship="Self.FK__detalleFa__idPed__239E4DCF" FromRole="Venta" ToRole="DetalleVenta" />
-          <NavigationProperty Name="Usuario" Relationship="Self.FK_Venta_Usuario" FromRole="Venta" ToRole="Usuario" />
-          <Property Name="ordenFacturada" Type="Boolean" />
+          <NavigationProperty Name="Venta" Relationship="barbdModel.FK_Venta_Usuario" FromRole="Usuario" ToRole="Venta" />
+          <NavigationProperty Name="Creditos" Relationship="barbdModel.FK_Creditos_Usuario" FromRole="Usuario" ToRole="Creditos" />
         </EntityType>
         <Association Name="FK_categoria_categoria_idtipoCategoria">
           <End Role="TipoCategoria" Type="Self.TipoCategoria" Multiplicity="0..1" />
@@ -601,66 +648,6 @@
             </Principal>
             <Dependent Role="Producto">
               <PropertyRef Name="idCategoria" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_venta_cliente">
-          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
-          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cliente">
-              <PropertyRef Name="idCliente" />
-            </Principal>
-            <Dependent Role="Venta">
-              <PropertyRef Name="idCliente" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Factura_Cuadre">
-          <End Role="Cuadre" Type="Self.Cuadre" Multiplicity="0..1" />
-          <End Role="Factura" Type="Self.Factura" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cuadre">
-              <PropertyRef Name="idCuadre" />
-            </Principal>
-            <Dependent Role="Factura">
-              <PropertyRef Name="idCuadre" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__detalleFa__idPed__239E4DCF">
-          <End Role="Venta" Type="Self.Venta" Multiplicity="1" />
-          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Venta">
-              <PropertyRef Name="idVenta" />
-            </Principal>
-            <Dependent Role="DetalleVenta">
-              <PropertyRef Name="idVenta" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_detalleFactura_productor">
-          <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
-          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Producto">
-              <PropertyRef Name="idProducto" />
-            </Principal>
-            <Dependent Role="DetalleVenta">
-              <PropertyRef Name="idProducto" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_factura_modoPago">
-          <End Role="ModoPago" Type="Self.ModoPago" Multiplicity="1" />
-          <End Role="Factura" Type="Self.Factura" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ModoPago">
-              <PropertyRef Name="numPago" />
-            </Principal>
-            <Dependent Role="Factura">
-              <PropertyRef Name="numPago" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -700,24 +687,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Venta_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
-          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Usuario">
-              <PropertyRef Name="idUsuario" />
-            </Principal>
-            <Dependent Role="Venta">
-              <PropertyRef Name="idUsuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="barbdEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Categoria" EntityType="Self.Categoria" />
           <EntitySet Name="Cliente" EntityType="Self.Cliente" />
           <EntitySet Name="Cuadre" EntityType="Self.Cuadre" />
-          <EntitySet Name="DetalleVenta" EntityType="Self.DetalleVenta" />
-          <EntitySet Name="Factura" EntityType="Self.Factura" />
           <EntitySet Name="Impuesto" EntityType="Self.Impuesto" />
           <EntitySet Name="Inventario" EntityType="Self.Inventario" />
           <EntitySet Name="ModoPago" EntityType="Self.ModoPago" />
@@ -726,7 +699,6 @@
           <EntitySet Name="Suplidor" EntityType="Self.Suplidor" />
           <EntitySet Name="TipoCategoria" EntityType="Self.TipoCategoria" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" />
-          <EntitySet Name="Venta" EntityType="Self.Venta" />
           <AssociationSet Name="FK_categoria_categoria_idtipoCategoria" Association="Self.FK_categoria_categoria_idtipoCategoria">
             <End Role="TipoCategoria" EntitySet="TipoCategoria" />
             <End Role="Categoria" EntitySet="Categoria" />
@@ -734,26 +706,6 @@
           <AssociationSet Name="FK_producto_producto_CategoriaId" Association="Self.FK_producto_producto_CategoriaId">
             <End Role="Categoria" EntitySet="Categoria" />
             <End Role="Producto" EntitySet="Producto" />
-          </AssociationSet>
-          <AssociationSet Name="FK_venta_cliente" Association="Self.FK_venta_cliente">
-            <End Role="Cliente" EntitySet="Cliente" />
-            <End Role="Venta" EntitySet="Venta" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Factura_Cuadre" Association="Self.FK_Factura_Cuadre">
-            <End Role="Cuadre" EntitySet="Cuadre" />
-            <End Role="Factura" EntitySet="Factura" />
-          </AssociationSet>
-          <AssociationSet Name="FK__detalleFa__idPed__239E4DCF" Association="Self.FK__detalleFa__idPed__239E4DCF">
-            <End Role="Venta" EntitySet="Venta" />
-            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
-          </AssociationSet>
-          <AssociationSet Name="FK_detalleFactura_productor" Association="Self.FK_detalleFactura_productor">
-            <End Role="Producto" EntitySet="Producto" />
-            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
-          </AssociationSet>
-          <AssociationSet Name="FK_factura_modoPago" Association="Self.FK_factura_modoPago">
-            <End Role="ModoPago" EntitySet="ModoPago" />
-            <End Role="Factura" EntitySet="Factura" />
           </AssociationSet>
           <AssociationSet Name="FK_idProducto_PK_idProducto_t_producto" Association="Self.FK_idProducto_PK_idProducto_t_producto">
             <End Role="Producto" EntitySet="Producto" />
@@ -766,10 +718,6 @@
           <AssociationSet Name="FK_vendedor_Roles" Association="Self.FK_vendedor_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Usuario" EntitySet="Usuario" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Venta_Usuario" Association="Self.FK_Venta_Usuario">
-            <End Role="Usuario" EntitySet="Usuario" />
-            <End Role="Venta" EntitySet="Venta" />
           </AssociationSet>
           <EntitySet Name="Gastos" EntityType="barbdModel.Gastos" />
           <AssociationSet Name="PK_Cuadre_FK_Gastos" Association="barbdModel.PK_Cuadre_FK_Gastos">
@@ -786,7 +734,53 @@
             <End Role="Mesa" EntitySet="Mesa" />
             <End Role="Cliente" EntitySet="Cliente" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="DetalleVenta" EntityType="barbdModel.DetalleVenta" />
+          <AssociationSet Name="FK_detalleFactura_productor" Association="barbdModel.FK_detalleFactura_productor">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <EntitySet Name="Venta" EntityType="barbdModel.Venta" />
+          <AssociationSet Name="FK_venta_cliente" Association="barbdModel.FK_venta_cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_Cuadre" Association="barbdModel.FK_Venta_Cuadre">
+            <End Role="Cuadre" EntitySet="Cuadre" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__detalleFa__idPed__239E4DCF" Association="barbdModel.FK__detalleFa__idPed__239E4DCF">
+            <End Role="Venta" EntitySet="Venta" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_Usuario" Association="barbdModel.FK_Venta_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <EntitySet Name="Configuraciones" EntityType="barbdModel.Configuraciones" />
+          <EntitySet Name="Factura" EntityType="barbdModel.Factura" />
+          <AssociationSet Name="FK_factura_modoPago" Association="barbdModel.FK_factura_modoPago">
+            <End Role="ModoPago" EntitySet="ModoPago" />
+            <End Role="Factura" EntitySet="Factura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Factura_Venta" Association="barbdModel.FK_Factura_Venta">
+            <End Role="Venta" EntitySet="Venta" />
+            <End Role="Factura" EntitySet="Factura" />
+          </AssociationSet>
+          <EntitySet Name="Creditos" EntityType="barbdModel.Creditos" />
+          <AssociationSet Name="FK_Creditos_Factura" Association="barbdModel.FK_Creditos_Factura">
+            <End Role="Factura" EntitySet="Factura" />
+            <End Role="Creditos" EntitySet="Creditos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Creditos_Usuario" Association="barbdModel.FK_Creditos_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Creditos" EntitySet="Creditos" />
+          </AssociationSet>
+          <EntitySet Name="Pagos" EntityType="barbdModel.Pagos" />
+          <AssociationSet Name="FK_Pagos_Creditos" Association="barbdModel.FK_Pagos_Creditos">
+            <End Role="Creditos" EntitySet="Creditos" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="Gastos">
           <Key>
             <PropertyRef Name="IdGastos" />
@@ -851,7 +845,207 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="DetalleVenta">
+          <Key>
+            <PropertyRef Name="idDetalle" />
+          </Key>
+          <Property Name="idDetalle" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idVenta" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="subTotal" Type="Single" Nullable="false" />
+          <Property Name="idProducto" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="despachada" Type="Boolean" />
+          <Property Name="precioVenta" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="precioEntrada" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="espcial" Type="Boolean" />
+          <NavigationProperty Name="Producto" Relationship="barbdModel.FK_detalleFactura_productor" FromRole="DetalleVenta" ToRole="Producto" />
+          <NavigationProperty Name="Venta" Relationship="barbdModel.FK__detalleFa__idPed__239E4DCF" FromRole="DetalleVenta" ToRole="Venta" />
+        </EntityType>
+        <Association Name="FK_detalleFactura_productor">
+          <End Type="barbdModel.Producto" Role="Producto" Multiplicity="0..1" />
+          <End Type="barbdModel.DetalleVenta" Role="DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="idProducto" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="idProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="idVenta" />
+          </Key>
+          <Property Name="idVenta" Type="Decimal" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="total" Type="Single" Nullable="false" />
+          <Property Name="idCliente" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <Property Name="IVA" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="ordenCerrada" Type="Boolean" />
+          <Property Name="idUsuario" Type="Int32" />
+          <Property Name="ordenFacturada" Type="Boolean" />
+          <Property Name="idCuadre" Type="Int32" />
+          <NavigationProperty Name="Cliente" Relationship="barbdModel.FK_venta_cliente" FromRole="Venta" ToRole="Cliente" />
+          <NavigationProperty Name="Cuadre" Relationship="barbdModel.FK_Venta_Cuadre" FromRole="Venta" ToRole="Cuadre" />
+          <NavigationProperty Name="DetalleVenta" Relationship="barbdModel.FK__detalleFa__idPed__239E4DCF" FromRole="Venta" ToRole="DetalleVenta" />
+          <NavigationProperty Name="Usuario" Relationship="barbdModel.FK_Venta_Usuario" FromRole="Venta" ToRole="Usuario" />
+          <NavigationProperty Name="Factura" Relationship="barbdModel.FK_Factura_Venta" FromRole="Venta" ToRole="Factura" />
+        </EntityType>
+        <Association Name="FK_venta_cliente">
+          <End Type="barbdModel.Cliente" Role="Cliente" Multiplicity="1" />
+          <End Type="barbdModel.Venta" Role="Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="idCliente" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="idCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_Cuadre">
+          <End Type="barbdModel.Cuadre" Role="Cuadre" Multiplicity="0..1" />
+          <End Type="barbdModel.Venta" Role="Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuadre">
+              <PropertyRef Name="idCuadre" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="idCuadre" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__detalleFa__idPed__239E4DCF">
+          <End Type="barbdModel.Venta" Role="Venta" Multiplicity="1" />
+          <End Type="barbdModel.DetalleVenta" Role="DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="idVenta" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="idVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_Usuario">
+          <End Type="barbdModel.Usuario" Role="Usuario" Multiplicity="0..1" />
+          <End Type="barbdModel.Venta" Role="Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Configuraciones">
+          <Key>
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="Key" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Factura">
+          <Key>
+            <PropertyRef Name="numFactura" />
+          </Key>
+          <Property Name="numFactura" Type="Decimal" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="IVA" Type="Single" Nullable="false" />
+          <Property Name="total" Type="Single" Nullable="false" />
+          <Property Name="numPago" Type="Int32" Nullable="false" />
+          <Property Name="descuento" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="idVenta" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="TieneCedito" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ModoPago" Relationship="barbdModel.FK_factura_modoPago" FromRole="Factura" ToRole="ModoPago" />
+          <NavigationProperty Name="Venta" Relationship="barbdModel.FK_Factura_Venta" FromRole="Factura" ToRole="Venta" />
+          <NavigationProperty Name="Creditos" Relationship="barbdModel.FK_Creditos_Factura" FromRole="Factura" ToRole="Creditos" />
+        </EntityType>
+        <Association Name="FK_factura_modoPago">
+          <End Type="barbdModel.ModoPago" Role="ModoPago" Multiplicity="1" />
+          <End Type="barbdModel.Factura" Role="Factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ModoPago">
+              <PropertyRef Name="numPago" />
+            </Principal>
+            <Dependent Role="Factura">
+              <PropertyRef Name="numPago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Factura_Venta">
+          <End Type="barbdModel.Venta" Role="Venta" Multiplicity="0..1" />
+          <End Type="barbdModel.Factura" Role="Factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="idVenta" />
+            </Principal>
+            <Dependent Role="Factura">
+              <PropertyRef Name="idVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Creditos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="numFactura" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="idUsuario" Type="Int32" Nullable="false" />
+          <Property Name="MontoRestante" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <NavigationProperty Name="Factura" Relationship="barbdModel.FK_Creditos_Factura" FromRole="Creditos" ToRole="Factura" />
+          <NavigationProperty Name="Usuario" Relationship="barbdModel.FK_Creditos_Usuario" FromRole="Creditos" ToRole="Usuario" />
+          <NavigationProperty Name="Pagos" Relationship="barbdModel.FK_Pagos_Creditos" FromRole="Creditos" ToRole="Pagos" />
+        </EntityType>
+        <Association Name="FK_Creditos_Factura">
+          <End Type="barbdModel.Factura" Role="Factura" Multiplicity="0..1" />
+          <End Type="barbdModel.Creditos" Role="Creditos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Factura">
+              <PropertyRef Name="numFactura" />
+            </Principal>
+            <Dependent Role="Creditos">
+              <PropertyRef Name="numFactura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Creditos_Usuario">
+          <End Type="barbdModel.Usuario" Role="Usuario" Multiplicity="1" />
+          <End Type="barbdModel.Creditos" Role="Creditos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="Creditos">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Pagos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idCredito" Type="Int32" Nullable="false" />
+          <Property Name="Monto" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Creditos" Relationship="barbdModel.FK_Pagos_Creditos" FromRole="Pagos" ToRole="Creditos" />
+        </EntityType>
+        <Association Name="FK_Pagos_Creditos">
+          <End Type="barbdModel.Creditos" Role="Creditos" Multiplicity="1" />
+          <End Type="barbdModel.Pagos" Role="Pagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Creditos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="idCredito" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -881,35 +1075,6 @@
                 <ScalarProperty Name="idCuadre" ColumnName="idCuadre" />
                 <ScalarProperty Name="fecha" ColumnName="fecha" />
                 <ScalarProperty Name="cerrado" ColumnName="cerrado" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DetalleVenta">
-            <EntityTypeMapping TypeName="barbdModel.DetalleVenta">
-              <MappingFragment StoreEntitySet="DetalleVenta">
-                <ScalarProperty Name="idDetalle" ColumnName="idDetalle" />
-                <ScalarProperty Name="numFactura" ColumnName="numFactura" />
-                <ScalarProperty Name="idVenta" ColumnName="idVenta" />
-                <ScalarProperty Name="subTotal" ColumnName="subTotal" />
-                <ScalarProperty Name="idProducto" ColumnName="idProducto" />
-                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
-                <ScalarProperty Name="despachada" ColumnName="despachada" />
-                <ScalarProperty Name="precioVenta" ColumnName="precioVenta" />
-                <ScalarProperty Name="precioEntrada" ColumnName="precioEntrada" />
-                <ScalarProperty Name="espcial" ColumnName="espcial" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Factura">
-            <EntityTypeMapping TypeName="barbdModel.Factura">
-              <MappingFragment StoreEntitySet="Factura">
-                <ScalarProperty Name="numFactura" ColumnName="numFactura" />
-                <ScalarProperty Name="fecha" ColumnName="fecha" />
-                <ScalarProperty Name="IVA" ColumnName="IVA" />
-                <ScalarProperty Name="total" ColumnName="total" />
-                <ScalarProperty Name="numPago" ColumnName="numPago" />
-                <ScalarProperty Name="descuento" ColumnName="descuento" />
-                <ScalarProperty Name="idCuadre" ColumnName="idCuadre" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -996,20 +1161,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Venta">
-            <EntityTypeMapping TypeName="barbdModel.Venta">
-              <MappingFragment StoreEntitySet="Venta">
-                <ScalarProperty Name="ordenFacturada" ColumnName="ordenFacturada" />
-                <ScalarProperty Name="idVenta" ColumnName="idVenta" />
-                <ScalarProperty Name="total" ColumnName="total" />
-                <ScalarProperty Name="idCliente" ColumnName="idCliente" />
-                <ScalarProperty Name="fecha" ColumnName="fecha" />
-                <ScalarProperty Name="IVA" ColumnName="IVA" />
-                <ScalarProperty Name="ordenCerrada" ColumnName="ordenCerrada" />
-                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Gastos">
             <EntityTypeMapping TypeName="barbdModel.Gastos">
               <MappingFragment StoreEntitySet="Gastos">
@@ -1035,6 +1186,78 @@
               <MappingFragment StoreEntitySet="Mesa">
                 <ScalarProperty Name="descripcion" ColumnName="descripcion" />
                 <ScalarProperty Name="idMesa" ColumnName="idMesa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetalleVenta">
+            <EntityTypeMapping TypeName="barbdModel.DetalleVenta">
+              <MappingFragment StoreEntitySet="DetalleVenta">
+                <ScalarProperty Name="espcial" ColumnName="espcial" />
+                <ScalarProperty Name="precioEntrada" ColumnName="precioEntrada" />
+                <ScalarProperty Name="precioVenta" ColumnName="precioVenta" />
+                <ScalarProperty Name="despachada" ColumnName="despachada" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="idProducto" ColumnName="idProducto" />
+                <ScalarProperty Name="subTotal" ColumnName="subTotal" />
+                <ScalarProperty Name="idVenta" ColumnName="idVenta" />
+                <ScalarProperty Name="idDetalle" ColumnName="idDetalle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Venta">
+            <EntityTypeMapping TypeName="barbdModel.Venta">
+              <MappingFragment StoreEntitySet="Venta">
+                <ScalarProperty Name="idCuadre" ColumnName="idCuadre" />
+                <ScalarProperty Name="ordenFacturada" ColumnName="ordenFacturada" />
+                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+                <ScalarProperty Name="ordenCerrada" ColumnName="ordenCerrada" />
+                <ScalarProperty Name="IVA" ColumnName="IVA" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="idCliente" ColumnName="idCliente" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="idVenta" ColumnName="idVenta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Configuraciones">
+            <EntityTypeMapping TypeName="barbdModel.Configuraciones">
+              <MappingFragment StoreEntitySet="Configuraciones">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Factura">
+            <EntityTypeMapping TypeName="barbdModel.Factura">
+              <MappingFragment StoreEntitySet="Factura">
+                <ScalarProperty Name="TieneCedito" ColumnName="TieneCedito" />
+                <ScalarProperty Name="idVenta" ColumnName="idVenta" />
+                <ScalarProperty Name="descuento" ColumnName="descuento" />
+                <ScalarProperty Name="numPago" ColumnName="numPago" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="IVA" ColumnName="IVA" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="numFactura" ColumnName="numFactura" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Creditos">
+            <EntityTypeMapping TypeName="barbdModel.Creditos">
+              <MappingFragment StoreEntitySet="Creditos">
+                <ScalarProperty Name="MontoRestante" ColumnName="MontoRestante" />
+                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+                <ScalarProperty Name="numFactura" ColumnName="numFactura" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pagos">
+            <EntityTypeMapping TypeName="barbdModel.Pagos">
+              <MappingFragment StoreEntitySet="Pagos">
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="idCredito" ColumnName="idCredito" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

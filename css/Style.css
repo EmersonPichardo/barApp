@@ -1,0 +1,59 @@
+﻿select[multiple] option {
+    transition: padding-left 250ms ease-out;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+    select[multiple] option:checked {
+        padding-left: 1rem !important;
+        border-radius: 0.35rem;
+    }
+
+select[multiple].select-primary option:checked {
+    background: #4e73df linear-gradient(0deg, #4e73df 0%, #4e73df 100%);
+}
+
+select[multiple].select-success option:checked {
+    background: #1cc88a linear-gradient(0deg, #1cc88a 0%, #1cc88a 100%);
+}
+
+select[multiple].select-info option:checked {
+    background: #36b9cc linear-gradient(0deg, #36b9cc 0%, #36b9cc 100%);
+}
+
+select[multiple].select-warning option:checked {
+    background: #f6c23e linear-gradient(0deg, #f6c23e 0%, #f6c23e 100%);
+}
+
+input[type='radio'] {
+    transform: scale(1.5);
+}
+
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-track-piece {
+    background: #f8f9fc;
+    border: 1px solid #e3e6f0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #858796;
+    border-radius: 0.25rem;
+}
+
+.form-check-inline {
+    display: unset;
+    align-items: unset;
+    padding-left: unset;
+    margin-right: 1.25rem;
+}
+    .form-check-inline .form-check-input {
+        margin-right: 0;
+    }
+
+#body-container {
+    transition: filter ease-out 400ms;
+}
+
+    #body-container.blur {
+        filter: blur(5px);
+    }

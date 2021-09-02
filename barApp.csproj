@@ -120,6 +120,9 @@
       <Private>True</Private>
       <HintPath>packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Zen.Barcode.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b5ae55aa76d2d9de, processorArchitecture=MSIL">
+      <HintPath>packages\Zen.Barcode.Rendering.Framework.3.1.10729.1\lib\Zen.Barcode.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
@@ -136,9 +139,15 @@
     <Compile Include="Cliente.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Configuraciones.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OrdenController.cs" />
+    <Compile Include="Creditos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Cuadre.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -181,10 +190,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\CuadreResumen.cs" />
     <Compile Include="Models\InfoMensaje.cs" />
     <Compile Include="Models\Inventario.cs" />
     <Compile Include="Models\Printer.cs" />
+    <Compile Include="Models\RequestVenta.cs" />
+    <Compile Include="Models\CuadreTable.cs" />
     <Compile Include="ModoPago.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pagos.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Producto.cs">
@@ -218,6 +233,7 @@
     <Content Include="css\keyboard.css" />
     <Content Include="css\sb-admin-2.css" />
     <Content Include="css\sb-admin-2.min.css" />
+    <Content Include="css\Style.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -260,6 +276,7 @@
     <Content Include=".browserslistrc" />
     <Content Include=".gitignore" />
     <Content Include=".travis.yml" />
+    <Content Include=".editorconfig" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2208,6 +2225,10 @@
     <Content Include="Views\Orden\ListadoClientes.cshtml" />
     <Content Include="Views\Orden\ListadoDeOrdenes.cshtml" />
     <Content Include="Views\Orden\ListaMesas.cshtml" />
+    <Content Include="Views\Home\Cobrar.cshtml" />
+    <Content Include="Views\Home\ListaCreditos.cshtml" />
+    <Content Include="Views\Home\PagarCredito.cshtml" />
+    <Content Include="Views\Home\ListaHistoricoCreditos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

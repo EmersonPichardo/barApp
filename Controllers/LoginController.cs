@@ -1,4 +1,5 @@
-﻿using System;
+﻿using barApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -158,9 +159,9 @@ namespace barApp.Controllers
             using (var context = new barbdEntities())
             {
                 var ObjUsuarioV = context.Usuario.Where(x => x.contrasena == usuario.contrasena).Count();
-                if (ObjUsuarioV== 0)
+                if (ObjUsuarioV == 0)
                 {
-                    var ObjUsuario = context.Usuario.SingleOrDefault(x=> x.nombre == usuario.nombre);
+                    var ObjUsuario = context.Usuario.SingleOrDefault(x => x.nombre == usuario.nombre);
                     ObjUsuario.resetContrasena = false;
                     ObjUsuario.contrasena = usuario.contrasena;
                     context.SaveChanges();
@@ -177,21 +178,69 @@ namespace barApp.Controllers
             }
 
         }
+
+        [HttpPost]
+        public ActionResult IsAdmin(string code)
+        {
+            InfoMensaje info;
+
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                info = new InfoMensaje()
+                {
+                    Tipo = "Error",
+                    Mensaje = "Código incorrecto"
+                };
+
+                return Json(info);
+            }
+
+            bool isAdmin = false;
+
+            using (barbdEntities context = new barbdEntities())
+            {
+                int[] roles = new int[2] { 1, 4 };
+                isAdmin = context.Usuario
+                    .AsEnumerable()
+                    .Any(u =>
+                        (u.contrasena == code || u.idTarjeta == code)
+                        && u.activo.GetValueOrDefault(false)
+                        && roles.Contains(u.idRol.GetValueOrDefault(0))
+                    );
+            }
+
+            if (isAdmin)
+            {
+                info = new InfoMensaje()
+                {
+                    Tipo = "Ready"
+                };
+            }
+            else
+            {
+                info = new InfoMensaje()
+                {
+                    Tipo = "Notificacion",
+                    Mensaje = "Código incorrecto"
+                };
+            }
+
+            return Json(info);
+        }
+
         public ActionResult Salir()
         {
             System.Web.HttpContext.Current.Session["Usuario"] = null;
-            System.Web.HttpContext.Current.Session["Rol"] = null;           
+            System.Web.HttpContext.Current.Session["Rol"] = null;
             Session["idVenta"] = null;
             return RedirectToAction("Index");
 
         }
-
-
     }
 
     class InfoContrasena
     {
-        public string Mensaje { get; set;}
+        public string Mensaje { get; set; }
         public string Usuario { get; set; }
     }
 }

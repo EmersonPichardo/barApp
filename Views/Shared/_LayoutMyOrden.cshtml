@@ -382,6 +382,11 @@
             $("#codigoCliente").val('');
             $("#Apellido").val('');
             $("#Referencia").val('');
+
+            setTimeout(function () {
+                $("#Nombre").click();
+            }, 425);
+
             clearInterval(watchclose);
             watchclose = setInterval(function () {
 
